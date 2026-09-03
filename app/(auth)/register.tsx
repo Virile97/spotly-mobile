@@ -4,6 +4,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } fr
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { RegisterForm } from '@/features/auth/components/RegisterForm'
+import { DismissKeyboardView } from '@/shared/components/layout/DismissKeyboardView'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
@@ -21,20 +22,23 @@ export default function RegisterScreen() {
           <ScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
-            keyboardShouldPersistTaps="handled">
-            <View style={styles.hero}>
-              <Text style={styles.title}>Create your account.</Text>
-              <Text style={styles.description}>Start mapping the places worth going back to.</Text>
-            </View>
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag">
+            <DismissKeyboardView>
+              <View style={styles.hero}>
+                <Text style={styles.title}>Create your account.</Text>
+                <Text style={styles.description}>Start mapping the places worth going back to.</Text>
+              </View>
 
-            <RegisterForm />
+              <RegisterForm />
 
-            <View style={styles.footer}>
-              <Text style={styles.footerText}>Already have an account? </Text>
-              <Link href="/(auth)/login" style={styles.footerLink}>
-                Log in
-              </Link>
-            </View>
+              <View style={styles.footer}>
+                <Text style={styles.footerText}>Already have an account? </Text>
+                <Link href="/(auth)/login" style={styles.footerLink}>
+                  Log in
+                </Link>
+              </View>
+            </DismissKeyboardView>
           </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>

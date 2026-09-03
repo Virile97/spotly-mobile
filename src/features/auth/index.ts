@@ -1,6 +1,5 @@
 export { DateField } from './components/DateField'
 export { DropdownField } from './components/DropdownField'
-export { LoginForm } from './components/LoginForm'
 export { PillSelect } from './components/PillSelect'
 export { RegisterForm } from './components/RegisterForm'
 export { SocialButton } from './components/SocialButton'

@@ -1,46 +1,171 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Ionicons } from '@expo/vector-icons'
 import { useMutation } from '@tanstack/react-query'
-import { Link } from 'expo-router'
-import { useState } from 'react'
-import { Text } from 'react-native'
+import { Link, useRouter } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
+import { Controller, useForm } from 'react-hook-form'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { z } from 'zod'
 
 import { authApi } from '@/features/auth/api/auth.api'
-import { useAppTheme } from '@/providers/ThemeProvider'
-import { Screen } from '@/shared/components/layout/Screen'
-import { Button, Input } from '@/shared/components/ui'
+import { AuthTextField } from '@/features/auth/components/AuthTextField'
+import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
+import { DismissKeyboardView } from '@/shared/components/layout/DismissKeyboardView'
+import { palette } from '@/theme/colors'
+import { fontFamily } from '@/theme/fonts'
+import { spacing } from '@/theme/spacing'
+import { fontSize } from '@/theme/typography'
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email('Enter a valid email'),
+})
+
+type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>
 
 export default function ForgotPasswordScreen() {
-  const { theme } = useAppTheme()
-  const [email, setEmail] = useState('')
-  const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: () => authApi.requestPasswordReset(email),
+  const router = useRouter()
+
+  const { control, handleSubmit } = useForm<ForgotPasswordFormValues>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: { email: '' },
   })
 
+  const { mutate, isPending, isSuccess, error } = useMutation({
+    mutationFn: (values: ForgotPasswordFormValues) => authApi.requestPasswordReset(values.email),
+  })
+
+  const onSubmit = (values: ForgotPasswordFormValues) => mutate(values)
+
   return (
-    <Screen scroll>
-      <Text
-        style={{
-          color: theme.colors.text,
-          fontSize: theme.fontSize.xxl,
-          fontWeight: theme.fontWeight.bold,
-          marginBottom: theme.spacing.lg,
-        }}>
-        Reset password
-      </Text>
-      <Input label="Email" autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} />
-      <Button
-        label="Send reset link"
-        onPress={() => mutate()}
-        loading={isPending}
-        style={{ marginTop: theme.spacing.md }}
-      />
-      {isSuccess ? (
-        <Text style={{ color: theme.colors.success, marginTop: theme.spacing.sm }}>
-          Check your email for a reset link.
-        </Text>
-      ) : null}
-      <Link href="/(auth)/login" style={{ color: theme.colors.primary, marginTop: theme.spacing.md }}>
-        Back to login
-      </Link>
-    </Screen>
+    <View style={styles.container}>
+      <StatusBar style="light" />
+      <SafeAreaView style={styles.content} edges={['top', 'bottom']}>
+        <DismissKeyboardView style={styles.flex}>
+          <Pressable accessibilityRole="button" style={styles.backButton} onPress={() => router.back()}>
+            <Ionicons name="chevron-back" size={22} color={palette.white} />
+          </Pressable>
+
+          <View style={styles.centered}>
+            <View style={styles.hero}>
+              <Text style={styles.title}>Forgot your password?</Text>
+              <Text style={styles.description}>Enter the email on your account and we&apos;ll send a reset link.</Text>
+            </View>
+
+            <Controller
+              control={control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <AuthTextField
+                  label="Enter your email"
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  error={fieldState.error?.message}
+                />
+              )}
+            />
+
+            {isSuccess ? <Text style={styles.successText}>Check your email for a reset link.</Text> : null}
+            {error ? <Text style={styles.errorText}>{error.message}</Text> : null}
+          </View>
+
+          <View style={styles.actions}>
+            <OnboardingButton
+              label="Send reset link"
+              variant="filled"
+              style={styles.submitButton}
+              onPress={handleSubmit(onSubmit)}
+              disabled={isPending}
+            />
+
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>Remembered it? </Text>
+              <Link href="/(auth)/login" style={styles.footerLink}>
+                Log in
+              </Link>
+            </View>
+          </View>
+        </DismissKeyboardView>
+      </SafeAreaView>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0A090B',
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+  },
+  flex: {
+    flex: 1,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    gap: spacing.md,
+  },
+  hero: {
+    marginBottom: spacing.sm,
+  },
+  title: {
+    color: palette.white,
+    fontSize: fontSize.xxl,
+    fontFamily: fontFamily.headline,
+    lineHeight: 40,
+    marginBottom: spacing.sm,
+  },
+  description: {
+    color: 'rgba(255,255,255,0.65)',
+    fontSize: fontSize.md,
+    fontFamily: fontFamily.body,
+    lineHeight: 22,
+  },
+  successText: {
+    color: palette.green500,
+    fontSize: fontSize.sm,
+    fontFamily: fontFamily.body,
+  },
+  errorText: {
+    color: palette.red500,
+    fontSize: fontSize.sm,
+    fontFamily: fontFamily.body,
+  },
+  actions: {
+    paddingBottom: spacing.lg,
+  },
+  submitButton: {
+    flex: 0,
+    width: '100%',
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: spacing.md,
+  },
+  footerText: {
+    color: 'rgba(255,255,255,0.5)',
+    fontSize: fontSize.sm,
+    fontFamily: fontFamily.body,
+  },
+  footerLink: {
+    color: palette.pink500,
+    fontSize: fontSize.sm,
+    fontFamily: fontFamily.bodySemiBold,
+  },
+})
