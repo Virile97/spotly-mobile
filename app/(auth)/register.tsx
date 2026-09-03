@@ -1,7 +1,8 @@
 import { Link, useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { RegisterForm } from '@/features/auth/components/RegisterForm'
@@ -39,32 +40,29 @@ export default function RegisterScreen() {
     <View style={styles.container}>
       <StatusBar style="light" />
       <SafeAreaView style={styles.content} edges={['top', 'bottom']}>
-        <KeyboardAvoidingView
+        <KeyboardAwareScrollView
           style={styles.flex}
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 24 : 0}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContent}
-            keyboardShouldPersistTaps="handled"
-            keyboardDismissMode="on-drag">
-            <DismissKeyboardView>
-              <View style={styles.hero}>
-                <Text style={styles.title}>Create your account.</Text>
-                <Text style={styles.description}>Start mapping the places worth going back to.</Text>
-              </View>
+          bottomOffset={spacing.lg}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag">
+          <DismissKeyboardView>
+            <View style={styles.hero}>
+              <Text style={styles.title}>Create your account.</Text>
+              <Text style={styles.description}>Start mapping the places worth going back to.</Text>
+            </View>
 
-              <RegisterForm onRegistered={() => setIsRegistered(true)} />
+            <RegisterForm onRegistered={() => setIsRegistered(true)} />
 
-              <View style={styles.footer}>
-                <Text style={styles.footerText}>Already have an account? </Text>
-                <Link href="/(auth)/login" style={styles.footerLink}>
-                  Log in
-                </Link>
-              </View>
-            </DismissKeyboardView>
-          </ScrollView>
-        </KeyboardAvoidingView>
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>Already have an account? </Text>
+              <Link href="/(auth)/login" style={styles.footerLink}>
+                Log in
+              </Link>
+            </View>
+          </DismissKeyboardView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </View>
   )

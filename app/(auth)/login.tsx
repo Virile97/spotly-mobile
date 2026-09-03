@@ -13,7 +13,7 @@ import { FormError } from '@/features/auth/components/FormError'
 import { useLogin } from '@/features/auth/hooks/useLogin'
 import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/login.schema'
 import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
-import { DismissKeyboardView } from '@/shared/components/layout/DismissKeyboardView'
+import { KeyboardActionLayout } from '@/shared/components/layout/KeyboardActionLayout'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
@@ -38,17 +38,35 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <StatusBar style="light" />
       <SafeAreaView style={styles.content} edges={['top', 'bottom']}>
-        <DismissKeyboardView style={styles.flex}>
-          <Pressable accessibilityRole="button" style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="chevron-back" size={22} color={palette.white} />
-          </Pressable>
+        <Pressable accessibilityRole="button" style={styles.backButton} onPress={() => router.back()}>
+          <Ionicons name="chevron-back" size={22} color={palette.white} />
+        </Pressable>
 
-          <View style={styles.centered}>
-            <View style={styles.hero}>
-              <Text style={styles.title}>Welcome back.</Text>
-              <Text style={styles.description}>Log in to keep tracking the places you love.</Text>
+        <KeyboardActionLayout
+          action={
+            <OnboardingButton
+              label="Log in"
+              variant="filled"
+              style={styles.submitButton}
+              onPress={handleSubmit(onSubmit)}
+              disabled={isPending}
+              loading={isPending}
+            />
+          }
+          secondaryAction={
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>New to Spotly? </Text>
+              <Link href="/(auth)/register" style={styles.footerLink}>
+                Create account
+              </Link>
             </View>
+          }>
+          <View style={styles.hero}>
+            <Text style={styles.title}>Welcome back.</Text>
+            <Text style={styles.description}>Log in to keep tracking the places you love.</Text>
+          </View>
 
+          <View style={styles.fields}>
             <Controller
               control={control}
               name="email"
@@ -91,25 +109,7 @@ export default function LoginScreen() {
               />
             ) : null}
           </View>
-
-          <View style={styles.actions}>
-            <OnboardingButton
-              label="Log in"
-              variant="filled"
-              style={styles.submitButton}
-              onPress={handleSubmit(onSubmit)}
-              disabled={isPending}
-              loading={isPending}
-            />
-
-            <View style={styles.footer}>
-              <Text style={styles.footerText}>New to Spotly? </Text>
-              <Link href="/(auth)/register" style={styles.footerLink}>
-                Create account
-              </Link>
-            </View>
-          </View>
-        </DismissKeyboardView>
+        </KeyboardActionLayout>
       </SafeAreaView>
     </View>
   )
@@ -125,9 +125,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
   },
-  flex: {
-    flex: 1,
-  },
   backButton: {
     width: 40,
     height: 40,
@@ -136,14 +133,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.2)',
-  },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    gap: spacing.md,
+    marginBottom: spacing.md,
   },
   hero: {
-    marginBottom: spacing.sm,
+    marginBottom: spacing.lg,
   },
   title: {
     color: palette.white,
@@ -158,6 +151,9 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.body,
     lineHeight: 22,
   },
+  fields: {
+    gap: spacing.md,
+  },
   forgotPassword: {
     alignSelf: 'flex-end',
   },
@@ -165,9 +161,6 @@ const styles = StyleSheet.create({
     color: palette.pink500,
     fontSize: fontSize.sm,
     fontFamily: fontFamily.bodySemiBold,
-  },
-  actions: {
-    paddingBottom: spacing.lg,
   },
   submitButton: {
     flex: 0,

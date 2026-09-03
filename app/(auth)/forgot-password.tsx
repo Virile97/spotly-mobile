@@ -13,7 +13,7 @@ import { authApi } from '@/features/auth/api/auth.api'
 import { AuthTextField } from '@/features/auth/components/AuthTextField'
 import { FormError } from '@/features/auth/components/FormError'
 import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
-import { DismissKeyboardView } from '@/shared/components/layout/DismissKeyboardView'
+import { KeyboardActionLayout } from '@/shared/components/layout/KeyboardActionLayout'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
@@ -43,39 +43,13 @@ export default function ForgotPasswordScreen() {
     <View style={styles.container}>
       <StatusBar style="light" />
       <SafeAreaView style={styles.content} edges={['top', 'bottom']}>
-        <DismissKeyboardView style={styles.flex}>
-          <Pressable accessibilityRole="button" style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="chevron-back" size={22} color={palette.white} />
-          </Pressable>
+        <Pressable accessibilityRole="button" style={styles.backButton} onPress={() => router.back()}>
+          <Ionicons name="chevron-back" size={22} color={palette.white} />
+        </Pressable>
 
-          <View style={styles.centered}>
-            <View style={styles.hero}>
-              <Text style={styles.title}>Forgot your password?</Text>
-              <Text style={styles.description}>Enter the email on your account and we&apos;ll send a reset link.</Text>
-            </View>
-
-            <Controller
-              control={control}
-              name="email"
-              render={({ field, fieldState }) => (
-                <AuthTextField
-                  label="Enter your email"
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  error={fieldState.error?.message}
-                />
-              )}
-            />
-
-            {isSuccess ? <Text style={styles.successText}>Check your email for a reset link.</Text> : null}
-            {error ? (
-              <FormError message={error.message} issues={error instanceof ApiError ? error.issues : undefined} />
-            ) : null}
-          </View>
-
-          <View style={styles.actions}>
+        <KeyboardActionLayout
+          contentContainerStyle={styles.fields}
+          action={
             <OnboardingButton
               label="Send reset link"
               variant="filled"
@@ -84,15 +58,40 @@ export default function ForgotPasswordScreen() {
               disabled={isPending}
               loading={isPending}
             />
-
+          }
+          secondaryAction={
             <View style={styles.footer}>
               <Text style={styles.footerText}>Remembered it? </Text>
               <Link href="/(auth)/login" style={styles.footerLink}>
                 Log in
               </Link>
             </View>
+          }>
+          <View style={styles.hero}>
+            <Text style={styles.title}>Forgot your password?</Text>
+            <Text style={styles.description}>Enter the email on your account and we&apos;ll send a reset link.</Text>
           </View>
-        </DismissKeyboardView>
+
+          <Controller
+            control={control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <AuthTextField
+                label="Enter your email"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                value={field.value}
+                onChangeText={field.onChange}
+                error={fieldState.error?.message}
+              />
+            )}
+          />
+
+          {isSuccess ? <Text style={styles.successText}>Check your email for a reset link.</Text> : null}
+          {error ? (
+            <FormError message={error.message} issues={error instanceof ApiError ? error.issues : undefined} />
+          ) : null}
+        </KeyboardActionLayout>
       </SafeAreaView>
     </View>
   )
@@ -108,9 +107,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
   },
-  flex: {
-    flex: 1,
-  },
   backButton: {
     width: 40,
     height: 40,
@@ -119,10 +115,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.2)',
+    marginBottom: spacing.md,
   },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
+  fields: {
     gap: spacing.md,
   },
   hero: {
@@ -145,9 +140,6 @@ const styles = StyleSheet.create({
     color: palette.green500,
     fontSize: fontSize.sm,
     fontFamily: fontFamily.body,
-  },
-  actions: {
-    paddingBottom: spacing.lg,
   },
   submitButton: {
     flex: 0,
