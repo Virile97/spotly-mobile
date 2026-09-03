@@ -8,6 +8,8 @@ const config: ExpoConfig = {
   icon: './assets/images/icon.png',
   scheme: 'spotly',
   userInterfaceStyle: 'automatic',
+  // Root view colour behind the transparent edge-to-edge system bars.
+  backgroundColor: '#0A090B',
   ios: {
     icon: './assets/expo.icon',
   },
@@ -36,6 +38,9 @@ const config: ExpoConfig = {
     ],
     'expo-secure-store',
     'expo-asset',
+    // Hidden from launch instead of waiting for the JS component to mount.
+    // Android only, so the iOS status bar is left alone.
+    ['expo-navigation-bar', { hidden: true, style: 'light', enforceContrast: false }],
   ],
   experiments: {
     typedRoutes: true,

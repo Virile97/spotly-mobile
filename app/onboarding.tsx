@@ -50,7 +50,7 @@ export default function OnboardingScreen() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={onMomentumScrollEnd}
-        renderItem={({ item, index }) => (
+        renderItem={({ item }) => (
           <View style={{ width, height }}>
             <OnboardingSlide
               image={item.image}
@@ -59,7 +59,6 @@ export default function OnboardingScreen() {
               description={item.description}
               step={activeIndex}
               stepCount={onboardingSlides.length}
-              footerLabel={`0${index + 1} · ONBOARDING`}
             />
           </View>
         )}

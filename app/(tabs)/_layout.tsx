@@ -19,7 +19,7 @@ export default function TabsLayout() {
 function TabsNavigator() {
   return (
     <Tabs
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ headerShown: false, sceneStyle: { backgroundColor: '#0A090B' } }}
       tabBar={(props) => <FloatingTabBar {...props} />}>
       <Tabs.Screen
         name="index"

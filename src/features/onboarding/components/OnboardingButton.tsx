@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -62,7 +63,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,
-    paddingVertical: spacing.md,
+    // Android renders the label taller than iOS, so trim the padding to keep
+    // the button the same visual height across platforms.
+    paddingVertical: Platform.select({
+      android: spacing.sm + spacing.xs,
+      default: spacing.md
+    }),
     paddingHorizontal: spacing.lg
   },
   filled: {

@@ -15,7 +15,6 @@ interface OnboardingSlideProps {
   description: string
   step: number
   stepCount: number
-  footerLabel?: string
 }
 
 export function OnboardingSlide({
@@ -25,7 +24,6 @@ export function OnboardingSlide({
   description,
   step,
   stepCount,
-  footerLabel,
 }: OnboardingSlideProps) {
   return (
     <View style={styles.container}>
@@ -60,12 +58,6 @@ export function OnboardingSlide({
           <Text style={styles.description}>{description}</Text>
         </View>
       </SafeAreaView>
-
-      {footerLabel ? (
-        <Text style={styles.footer} pointerEvents="none">
-          {footerLabel}
-        </Text>
-      ) : null}
     </View>
   )
 }
@@ -135,14 +127,5 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.body,
     lineHeight: 22,
     marginBottom: spacing.lg,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 8,
-    alignSelf: 'center',
-    color: 'rgba(255,255,255,0.3)',
-    fontSize: fontSize.xs,
-    fontFamily: fontFamily.body,
-    letterSpacing: 1,
   },
 })
