@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router'
+import { useRouter, useSegments } from 'expo-router'
 import { useEffect, useState, type ReactNode } from 'react'
 
 import { authEvents } from '@/core/auth/auth-events'
@@ -9,14 +9,16 @@ import { LoadingState } from '@/shared/components/feedback/LoadingState'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
+  const segments = useSegments()
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const clear = useAuthStore((state) => state.clear)
   const setUser = useAuthStore((state) => state.setUser)
   const [isRestoring, setIsRestoring] = useState(true)
 
   useEffect(() => {
     async function restoreSession() {
-      const isAuthenticated = await session.isAuthenticated()
-      if (!isAuthenticated) return
+      const hasSession = await session.isAuthenticated()
+      if (!hasSession) return
 
       try {
         const { user } = await authApi.me()
@@ -34,6 +36,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       router.replace('/(auth)/login')
     })
   }, [clear, router, setUser])
+
+  // Guard route groups against the current auth state: signed-in users are
+  // pushed out of (auth), signed-out users are pushed out of (tabs). This
+  // runs on every navigation, not just boot, so it also catches session
+  // expiry while the user is browsing a protected screen.
+  useEffect(() => {
+    if (isRestoring) return
+
+    const inAuthGroup = segments[0] === '(auth)'
+    const inProtectedGroup = segments[0] === '(tabs)'
+
+    if (isAuthenticated && inAuthGroup) {
+      router.replace('/(tabs)')
+    } else if (!isAuthenticated && inProtectedGroup) {
+      router.replace('/(auth)/login')
+    }
+  }, [isAuthenticated, isRestoring, segments, router])
 
   if (isRestoring) {
     return <LoadingState />

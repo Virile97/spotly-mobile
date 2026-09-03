@@ -46,7 +46,11 @@ const INFO_STEP_FIELDS = [
   'address',
 ] as const satisfies readonly (keyof RegisterFormValues)[]
 
-export function RegisterForm() {
+interface RegisterFormProps {
+  onRegistered: () => void
+}
+
+export function RegisterForm({ onRegistered }: RegisterFormProps) {
   const { mutate, isPending } = useRegister()
   const [submitError, setSubmitError] = useState<ApiError | Error | null>(null)
   const [step, setStep] = useState<1 | 2>(1)
@@ -80,7 +84,7 @@ export function RegisterForm() {
       contactNo: values.contactNo || undefined,
       address: values.address || undefined,
     }
-    mutate(payload, { onError: (err) => setSubmitError(err) })
+    mutate(payload, { onError: (err) => setSubmitError(err), onSuccess: onRegistered })
   }
 
   return (

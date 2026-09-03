@@ -1,16 +1,40 @@
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { useEffect, useState } from 'react'
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { RegisterForm } from '@/features/auth/components/RegisterForm'
+import { RegisterSuccessScreen } from '@/features/auth/components/RegisterSuccessScreen'
 import { DismissKeyboardView } from '@/shared/components/layout/DismissKeyboardView'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
 import { fontSize } from '@/theme/typography'
 
+const REDIRECT_DELAY_MS = 1500
+
 export default function RegisterScreen() {
+  const router = useRouter()
+  const [isRegistered, setIsRegistered] = useState(false)
+
+  useEffect(() => {
+    if (!isRegistered) return
+    const timer = setTimeout(() => router.replace('/(auth)/login'), REDIRECT_DELAY_MS)
+    return () => clearTimeout(timer)
+  }, [isRegistered, router])
+
+  if (isRegistered) {
+    return (
+      <View style={styles.container}>
+        <StatusBar style="light" />
+        <SafeAreaView style={styles.content} edges={['top', 'bottom']}>
+          <RegisterSuccessScreen onBack={() => router.replace('/(auth)/login')} />
+        </SafeAreaView>
+      </View>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -30,7 +54,7 @@ export default function RegisterScreen() {
                 <Text style={styles.description}>Start mapping the places worth going back to.</Text>
               </View>
 
-              <RegisterForm />
+              <RegisterForm onRegistered={() => setIsRegistered(true)} />
 
               <View style={styles.footer}>
                 <Text style={styles.footerText}>Already have an account? </Text>

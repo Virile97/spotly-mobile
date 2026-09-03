@@ -29,12 +29,15 @@ export function FormError({ message, issues }: FormErrorProps) {
         <Text style={styles.message}>{message}</Text>
         {issues && issues.length > 0 ? (
           <View style={styles.issueList}>
-            {issues.map((issue, index) => (
-              <Text key={`${issue.path.join('.')}-${index}`} style={styles.issue}>
-                {'• '}
-                {issue.message}
-              </Text>
-            ))}
+            {issues.map((issue, index) => {
+              const pathKey = Array.isArray(issue.path) ? issue.path.join('.') : String(issue.path ?? index)
+              return (
+                <Text key={`${pathKey}-${index}`} style={styles.issue}>
+                  {'• '}
+                  {issue.message}
+                </Text>
+              )
+            })}
           </View>
         ) : null}
       </View>

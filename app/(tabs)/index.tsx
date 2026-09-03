@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { FeedList } from '@/features/feed/components/FeedList'
+import { useLogout } from '@/features/auth/hooks/useLogout'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
@@ -14,6 +15,7 @@ const hasUnreadNotifications = true
 
 export default function FeedScreen() {
   const router = useRouter()
+  const { mutate: logout, isPending: isLoggingOut } = useLogout()
 
   return (
     <View style={styles.container}>
@@ -22,13 +24,24 @@ export default function FeedScreen() {
         <View style={styles.header}>
           <Text style={styles.brand}>Spotly</Text>
 
-          <Pressable
-            accessibilityRole="button"
-            style={styles.notificationButton}
-            onPress={() => router.push('/(tabs)/notifications')}>
-            <Ionicons name="notifications-outline" size={20} color={palette.white} />
-            {hasUnreadNotifications ? <View style={styles.notificationDot} /> : null}
-          </Pressable>
+          <View style={styles.headerActions}>
+            {/* TODO: temporary logout entry point for testing; move into settings/profile menu */}
+            <Pressable
+              accessibilityRole="button"
+              style={styles.notificationButton}
+              disabled={isLoggingOut}
+              onPress={() => logout()}>
+              <Ionicons name="log-out-outline" size={20} color={palette.white} />
+            </Pressable>
+
+            <Pressable
+              accessibilityRole="button"
+              style={styles.notificationButton}
+              onPress={() => router.push('/(tabs)/notifications')}>
+              <Ionicons name="notifications-outline" size={20} color={palette.white} />
+              {hasUnreadNotifications ? <View style={styles.notificationDot} /> : null}
+            </Pressable>
+          </View>
         </View>
 
         <FeedList />
@@ -56,6 +69,10 @@ const styles = StyleSheet.create({
     color: palette.white,
     fontSize: fontSize.xl,
     fontFamily: fontFamily.headline,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    gap: spacing.sm,
   },
   notificationButton: {
     width: 40,
