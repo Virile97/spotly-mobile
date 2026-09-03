@@ -1,5 +1,5 @@
-import { apiClient } from '@/core/api/client';
-import type { Comment, CreateCommentPayload } from '@/features/comments/types/comment.types';
+import { apiClient } from '@/core/api/client'
+import type { Comment, CreateCommentPayload } from '@/features/comments/types/comment.types'
 
 export const commentsApi = {
   getComments: (postId: string) =>
@@ -10,4 +10,4 @@ export const commentsApi = {
 
   deleteComment: (postId: string, commentId: string) =>
     apiClient.delete(`/posts/${postId}/comments/${commentId}`).then(() => undefined),
-};
+}

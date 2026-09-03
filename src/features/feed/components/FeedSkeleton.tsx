@@ -1,10 +1,10 @@
-import { View } from 'react-native';
+import { View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { Skeleton } from '@/shared/components/ui';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { Skeleton } from '@/shared/components/ui'
 
 export function FeedSkeleton() {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <View style={{ gap: theme.spacing.md }}>
@@ -15,5 +15,5 @@ export function FeedSkeleton() {
         </View>
       ))}
     </View>
-  );
+  )
 }

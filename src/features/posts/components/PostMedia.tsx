@@ -1,10 +1,10 @@
-import { Image } from 'expo-image';
-import { Dimensions, StyleSheet } from 'react-native';
+import { Image } from 'expo-image'
+import { Dimensions, StyleSheet } from 'react-native'
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get('window')
 
 export function PostMedia({ uri }: { uri: string }) {
-  return <Image source={{ uri }} style={styles.media} contentFit="cover" />;
+  return <Image source={{ uri }} style={styles.media} contentFit="cover" />
 }
 
 const styles = StyleSheet.create({
@@ -12,4 +12,4 @@ const styles = StyleSheet.create({
     width,
     height: width,
   },
-});
+})

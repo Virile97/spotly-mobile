@@ -4,4 +4,4 @@ export const fontFamily = {
   body: 'InterTight_400Regular',
   bodyMedium: 'InterTight_500Medium',
   bodySemiBold: 'InterTight_600SemiBold',
-} as const;
+} as const

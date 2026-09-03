@@ -1,12 +1,12 @@
-import { useLocalSearchParams } from 'expo-router';
-import { KeyboardAvoidingView, Platform } from 'react-native';
+import { useLocalSearchParams } from 'expo-router'
+import { KeyboardAvoidingView, Platform } from 'react-native'
 
-import { CommentInput } from '@/features/comments/components/CommentInput';
-import { CommentList } from '@/features/comments/components/CommentList';
-import { Screen } from '@/shared/components/layout/Screen';
+import { CommentInput } from '@/features/comments/components/CommentInput'
+import { CommentList } from '@/features/comments/components/CommentList'
+import { Screen } from '@/shared/components/layout/Screen'
 
 export default function CommentsScreen() {
-  const { postId } = useLocalSearchParams<{ postId: string }>();
+  const { postId } = useLocalSearchParams<{ postId: string }>()
 
   return (
     <Screen>
@@ -15,5 +15,5 @@ export default function CommentsScreen() {
         <CommentInput postId={postId} />
       </KeyboardAvoidingView>
     </Screen>
-  );
+  )
 }

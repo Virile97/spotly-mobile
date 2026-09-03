@@ -1,24 +1,24 @@
-import { disconnectSocket, getSocket } from './socket';
+import { disconnectSocket, getSocket } from './socket'
 
 class SocketManager {
   connect(token: string): void {
-    const socket = getSocket(token);
+    const socket = getSocket(token)
     if (!socket.connected) {
-      socket.connect();
+      socket.connect()
     }
   }
 
   disconnect(): void {
-    disconnectSocket();
+    disconnectSocket()
   }
 
   joinRoom(room: string): void {
-    getSocket('').emit('room:join', room);
+    getSocket('').emit('room:join', room)
   }
 
   leaveRoom(room: string): void {
-    getSocket('').emit('room:leave', room);
+    getSocket('').emit('room:leave', room)
   }
 }
 
-export const socketManager = new SocketManager();
+export const socketManager = new SocketManager()

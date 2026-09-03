@@ -1,14 +1,14 @@
-import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image } from 'expo-image'
+import { useRouter } from 'expo-router'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import type { Place } from '@/features/places/types/place.types';
-import { PlaceStatus } from './PlaceStatus';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import type { Place } from '@/features/places/types/place.types'
+import { PlaceStatus } from './PlaceStatus'
 
 export function PlaceCard({ place }: { place: Place }) {
-  const { theme } = useAppTheme();
-  const router = useRouter();
+  const { theme } = useAppTheme()
+  const router = useRouter()
 
   return (
     <TouchableOpacity
@@ -25,7 +25,7 @@ export function PlaceCard({ place }: { place: Place }) {
         <PlaceStatus isOpenNow={place.isOpenNow} />
       </View>
     </TouchableOpacity>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 8,
   },
-});
+})

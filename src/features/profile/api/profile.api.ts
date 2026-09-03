@@ -1,21 +1,21 @@
-import { apiClient } from '@/core/api/client';
-import type { AuthUser } from '@/features/auth/types/auth.types';
+import { apiClient } from '@/core/api/client'
+import type { AuthUser } from '@/features/auth/types/auth.types'
 
 export interface ProfileStats {
-  postCount: number;
-  followerCount: number;
-  followingCount: number;
+  postCount: number
+  followerCount: number
+  followingCount: number
 }
 
 export interface UserProfile extends AuthUser {
-  bio: string | null;
-  stats: ProfileStats;
+  bio: string | null
+  stats: ProfileStats
 }
 
 export interface UpdateProfilePayload {
-  username?: string;
-  bio?: string;
-  avatarUrl?: string;
+  username?: string
+  bio?: string
+  avatarUrl?: string
 }
 
 export const profileApi = {
@@ -24,4 +24,4 @@ export const profileApi = {
 
   updateProfile: (payload: UpdateProfilePayload) =>
     apiClient.patch<UserProfile>('/users/me', payload).then((res) => res.data),
-};
+}

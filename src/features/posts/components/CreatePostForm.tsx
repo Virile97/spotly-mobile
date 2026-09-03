@@ -1,27 +1,27 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { Text, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { useCreatePost } from '@/features/posts/hooks/useCreatePost';
-import { createPostSchema, type CreatePostFormValues } from '@/features/posts/schemas/post.schema';
-import { Button, Input } from '@/shared/components/ui';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { useCreatePost } from '@/features/posts/hooks/useCreatePost'
+import { createPostSchema, type CreatePostFormValues } from '@/features/posts/schemas/post.schema'
+import { Button, Input } from '@/shared/components/ui'
 
 export function CreatePostForm({ onSuccess }: { onSuccess?: () => void }) {
-  const { theme } = useAppTheme();
-  const { mutate, isPending } = useCreatePost();
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const { theme } = useAppTheme()
+  const { mutate, isPending } = useCreatePost()
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const { control, handleSubmit } = useForm<CreatePostFormValues>({
     resolver: zodResolver(createPostSchema),
     defaultValues: { caption: '', mediaUrls: [] },
-  });
+  })
 
   const onSubmit = (values: CreatePostFormValues) => {
-    setSubmitError(null);
-    mutate(values, { onSuccess, onError: (err) => setSubmitError(err.message) });
-  };
+    setSubmitError(null)
+    mutate(values, { onSuccess, onError: (err) => setSubmitError(err.message) })
+  }
 
   return (
     <View style={{ gap: theme.spacing.sm }}>
@@ -41,5 +41,5 @@ export function CreatePostForm({ onSuccess }: { onSuccess?: () => void }) {
       <Button label="Post" onPress={handleSubmit(onSubmit)} loading={isPending} />
       {submitError ? <Text style={{ color: theme.colors.error }}>{submitError}</Text> : null}
     </View>
-  );
+  )
 }

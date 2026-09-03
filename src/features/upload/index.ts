@@ -1,1 +1,1 @@
-export { useUpload } from './hooks/useUpload';
+export { useUpload } from './hooks/useUpload'

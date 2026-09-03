@@ -1,42 +1,42 @@
-import { useRouter } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { useRef, useState } from 'react';
-import { Dimensions, FlatList, StyleSheet, View, type NativeSyntheticEvent, type NativeScrollEvent } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
+import { useRef, useState } from 'react'
+import { Dimensions, FlatList, StyleSheet, View, type NativeSyntheticEvent, type NativeScrollEvent } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton';
-import { OnboardingSlide } from '@/features/onboarding/components/OnboardingSlide';
-import { onboardingSlides } from '@/features/onboarding/data/onboarding-slides';
-import { useAppStore } from '@/store/app.store';
-import { spacing } from '@/theme/spacing';
+import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
+import { OnboardingSlide } from '@/features/onboarding/components/OnboardingSlide'
+import { onboardingSlides } from '@/features/onboarding/data/onboarding-slides'
+import { useAppStore } from '@/store/app.store'
+import { spacing } from '@/theme/spacing'
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window')
 
 export default function OnboardingScreen() {
-  const router = useRouter();
-  const setOnboarded = useAppStore((state) => state.setOnboarded);
-  const listRef = useRef<FlatList>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const router = useRouter()
+  const setOnboarded = useAppStore((state) => state.setOnboarded)
+  const listRef = useRef<FlatList>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
 
-  const isLastSlide = activeIndex === onboardingSlides.length - 1;
+  const isLastSlide = activeIndex === onboardingSlides.length - 1
 
   const finishOnboarding = () => {
-    setOnboarded(true);
-    router.replace('/(auth)/welcome');
-  };
+    setOnboarded(true)
+    router.replace('/(auth)/welcome')
+  }
 
   const goToNext = () => {
     if (isLastSlide) {
-      finishOnboarding();
-      return;
+      finishOnboarding()
+      return
     }
-    listRef.current?.scrollToIndex({ index: activeIndex + 1, animated: true });
-  };
+    listRef.current?.scrollToIndex({ index: activeIndex + 1, animated: true })
+  }
 
   const onMomentumScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const index = Math.round(event.nativeEvent.contentOffset.x / width);
-    setActiveIndex(index);
-  };
+    const index = Math.round(event.nativeEvent.contentOffset.x / width)
+    setActiveIndex(index)
+  }
 
   return (
     <View style={[styles.container, { width, height }]}>
@@ -74,7 +74,7 @@ export default function OnboardingScreen() {
         <OnboardingButton label="Skip" variant="outline" onPress={finishOnboarding} />
       </SafeAreaView>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -91,4 +91,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingBottom: spacing.lg,
   },
-});
+})

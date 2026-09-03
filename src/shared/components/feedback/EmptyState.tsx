@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
+import { useAppTheme } from '@/providers/ThemeProvider'
 
 interface EmptyStateProps {
-  title: string;
-  description?: string;
+  title: string
+  description?: string
 }
 
 export function EmptyState({ title, description }: EmptyStateProps) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <View style={styles.container}>
@@ -27,7 +27,7 @@ export function EmptyState({ title, description }: EmptyStateProps) {
         </Text>
       ) : null}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
   },
-});
+})

@@ -1,10 +1,10 @@
-import { Marker } from 'react-native-maps';
+import { Marker } from 'react-native-maps'
 
-import type { Place } from '@/features/places/types/place.types';
+import type { Place } from '@/features/places/types/place.types'
 
 interface PlaceMarkerProps {
-  place: Place;
-  onPress?: () => void;
+  place: Place
+  onPress?: () => void
 }
 
 export function PlaceMarker({ place, onPress }: PlaceMarkerProps) {
@@ -15,5 +15,5 @@ export function PlaceMarker({ place, onPress }: PlaceMarkerProps) {
       description={place.address}
       onPress={onPress}
     />
-  );
+  )
 }

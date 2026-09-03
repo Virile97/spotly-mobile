@@ -1,15 +1,15 @@
-import { ScrollView, View, type ViewProps } from 'react-native';
+import { ScrollView, View, type ViewProps } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { SafeArea } from './SafeArea';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { SafeArea } from './SafeArea'
 
 interface ScreenProps extends ViewProps {
-  scroll?: boolean;
+  scroll?: boolean
 }
 
 export function Screen({ scroll, style, children, ...rest }: ScreenProps) {
-  const { theme } = useAppTheme();
-  const Container = scroll ? ScrollView : View;
+  const { theme } = useAppTheme()
+  const Container = scroll ? ScrollView : View
 
   return (
     <SafeArea>
@@ -19,5 +19,5 @@ export function Screen({ scroll, style, children, ...rest }: ScreenProps) {
         {children}
       </Container>
     </SafeArea>
-  );
+  )
 }

@@ -1,13 +1,13 @@
 import {
   BricolageGrotesque_600SemiBold,
   BricolageGrotesque_700Bold,
-} from '@expo-google-fonts/bricolage-grotesque';
+} from '@expo-google-fonts/bricolage-grotesque'
 import {
   InterTight_400Regular,
   InterTight_500Medium,
   InterTight_600SemiBold,
-} from '@expo-google-fonts/inter-tight';
-import { useFonts } from 'expo-font';
+} from '@expo-google-fonts/inter-tight'
+import { useFonts } from 'expo-font'
 
 export function useAppFonts() {
   return useFonts({
@@ -16,5 +16,5 @@ export function useAppFonts() {
     InterTight_400Regular,
     InterTight_500Medium,
     InterTight_600SemiBold,
-  });
+  })
 }

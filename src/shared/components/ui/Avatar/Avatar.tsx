@@ -1,20 +1,20 @@
-import { Image } from 'expo-image';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image } from 'expo-image'
+import { StyleSheet, Text, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
+import { useAppTheme } from '@/providers/ThemeProvider'
 
 interface AvatarProps {
-  uri?: string | null;
-  fallback: string;
-  size?: number;
+  uri?: string | null
+  fallback: string
+  size?: number
 }
 
 export function Avatar({ uri, fallback, size = 40 }: AvatarProps) {
-  const { theme } = useAppTheme();
-  const dimensionStyle = { width: size, height: size, borderRadius: size / 2 };
+  const { theme } = useAppTheme()
+  const dimensionStyle = { width: size, height: size, borderRadius: size / 2 }
 
   if (uri) {
-    return <Image source={{ uri }} style={dimensionStyle} contentFit="cover" />;
+    return <Image source={{ uri }} style={dimensionStyle} contentFit="cover" />
   }
 
   return (
@@ -28,7 +28,7 @@ export function Avatar({ uri, fallback, size = 40 }: AvatarProps) {
         {fallback.slice(0, 2).toUpperCase()}
       </Text>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+})

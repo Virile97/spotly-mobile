@@ -5,14 +5,14 @@ export const fontSize = {
   lg: 20,
   xl: 24,
   xxl: 32,
-} as const;
+} as const
 
 export const fontWeight = {
   regular: '400',
   medium: '500',
   semibold: '600',
   bold: '700',
-} as const;
+} as const
 
 export const typography = {
   h1: { fontSize: fontSize.xxl, fontWeight: fontWeight.bold },
@@ -21,4 +21,4 @@ export const typography = {
   body: { fontSize: fontSize.md, fontWeight: fontWeight.regular },
   bodySmall: { fontSize: fontSize.sm, fontWeight: fontWeight.regular },
   caption: { fontSize: fontSize.xs, fontWeight: fontWeight.regular },
-} as const;
+} as const

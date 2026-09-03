@@ -1,5 +1,5 @@
-import { apiClient } from '@/core/api/client';
-import type { Reaction, ReactionKind } from '@/features/reactions/types/reaction.types';
+import { apiClient } from '@/core/api/client'
+import type { Reaction, ReactionKind } from '@/features/reactions/types/reaction.types'
 
 export const reactionsApi = {
   react: (postId: string, kind: ReactionKind) =>
@@ -7,4 +7,4 @@ export const reactionsApi = {
 
   unreact: (postId: string) =>
     apiClient.delete(`/posts/${postId}/reactions`).then(() => undefined),
-};
+}

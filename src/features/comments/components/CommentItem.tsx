@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { Avatar } from '@/shared/components/ui';
-import { formatRelativeTime } from '@/shared/utils/date';
-import type { Comment } from '@/features/comments/types/comment.types';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { Avatar } from '@/shared/components/ui'
+import { formatRelativeTime } from '@/shared/utils/date'
+import type { Comment } from '@/features/comments/types/comment.types'
 
 export function CommentItem({ comment }: { comment: Comment }) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <View style={[styles.row, { marginBottom: theme.spacing.sm }]}>
@@ -21,11 +21,11 @@ export function CommentItem({ comment }: { comment: Comment }) {
         </Text>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },
-});
+})

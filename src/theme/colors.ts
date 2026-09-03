@@ -18,18 +18,18 @@ export const palette = {
   yellow500: '#EAB308',
   pink400: '#E07EBB',
   pink500: '#D6499D',
-} as const;
+} as const
 
 export interface ThemeColors {
-  background: string;
-  surface: string;
-  border: string;
-  text: string;
-  textSecondary: string;
-  primary: string;
-  success: string;
-  error: string;
-  warning: string;
+  background: string
+  surface: string
+  border: string
+  text: string
+  textSecondary: string
+  primary: string
+  success: string
+  error: string
+  warning: string
 }
 
 export const lightColors: ThemeColors = {
@@ -42,7 +42,7 @@ export const lightColors: ThemeColors = {
   success: palette.green500,
   error: palette.red500,
   warning: palette.yellow500,
-};
+}
 
 export const darkColors: ThemeColors = {
   background: palette.gray900,
@@ -54,4 +54,4 @@ export const darkColors: ThemeColors = {
   success: palette.green500,
   error: palette.red500,
   warning: palette.yellow500,
-};
+}

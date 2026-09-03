@@ -1,17 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { formatCompactNumber } from '@/shared/utils/number';
-import type { ProfileStats as ProfileStatsType } from '@/features/profile/api/profile.api';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { formatCompactNumber } from '@/shared/utils/number'
+import type { ProfileStats as ProfileStatsType } from '@/features/profile/api/profile.api'
 
 export function ProfileStats({ stats }: { stats: ProfileStatsType }) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   const items: [string, number][] = [
     ['Posts', stats.postCount],
     ['Followers', stats.followerCount],
     ['Following', stats.followingCount],
-  ];
+  ]
 
   return (
     <View style={styles.row}>
@@ -24,7 +24,7 @@ export function ProfileStats({ stats }: { stats: ProfileStatsType }) {
         </View>
       ))}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -35,4 +35,4 @@ const styles = StyleSheet.create({
   item: {
     alignItems: 'center',
   },
-});
+})

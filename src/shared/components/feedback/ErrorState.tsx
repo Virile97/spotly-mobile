@@ -1,15 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { Button } from '@/shared/components/ui';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { Button } from '@/shared/components/ui'
 
 interface ErrorStateProps {
-  message?: string;
-  onRetry?: () => void;
+  message?: string
+  onRetry?: () => void
 }
 
 export function ErrorState({ message = 'Something went wrong', onRetry }: ErrorStateProps) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <View style={styles.container}>
@@ -22,7 +22,7 @@ export function ErrorState({ message = 'Something went wrong', onRetry }: ErrorS
         </View>
       ) : null}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
   },
-});
+})

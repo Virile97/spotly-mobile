@@ -1,17 +1,17 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { formatCompactNumber } from '@/shared/utils/number';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { formatCompactNumber } from '@/shared/utils/number'
 
 interface PostActionsProps {
-  reactionCount: number;
-  commentCount: number;
-  onReactionPress: () => void;
-  onCommentPress: () => void;
+  reactionCount: number
+  commentCount: number
+  onReactionPress: () => void
+  onCommentPress: () => void
 }
 
 export function PostActions({ reactionCount, commentCount, onReactionPress, onCommentPress }: PostActionsProps) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <View style={[styles.row, { marginTop: theme.spacing.sm }]}>
@@ -22,7 +22,7 @@ export function PostActions({ reactionCount, commentCount, onReactionPress, onCo
         <Text style={{ color: theme.colors.text }}>{formatCompactNumber(commentCount)} comments</Text>
       </TouchableOpacity>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
   action: {
     paddingVertical: 4,
   },
-});
+})

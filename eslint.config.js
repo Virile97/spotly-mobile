@@ -6,5 +6,11 @@ module.exports = defineConfig([
   expoConfig,
   {
     ignores: ["dist/*"],
-  }
+  },
+  {
+    rules: {
+      semi: ["error", "never"],
+      "no-unexpected-multiline": "error",
+    },
+  },
 ]);

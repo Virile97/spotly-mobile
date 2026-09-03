@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { Avatar } from '@/shared/components/ui';
-import { formatRelativeTime } from '@/shared/utils/date';
-import type { Post } from '@/features/posts/types/post.types';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { Avatar } from '@/shared/components/ui'
+import { formatRelativeTime } from '@/shared/utils/date'
+import type { Post } from '@/features/posts/types/post.types'
 
 export function PostHeader({ post }: { post: Post }) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <View style={styles.row}>
@@ -20,7 +20,7 @@ export function PostHeader({ post }: { post: Post }) {
         </Text>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-});
+})

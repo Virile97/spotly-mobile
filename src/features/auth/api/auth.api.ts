@@ -1,5 +1,5 @@
-import { apiClient } from '@/core/api/client';
-import type { AuthResponse, LoginRequest, RegisterRequest } from './auth.types';
+import { apiClient } from '@/core/api/client'
+import type { AuthResponse, LoginRequest, RegisterRequest } from './auth.types'
 
 export const authApi = {
   login: (payload: LoginRequest) =>
@@ -12,4 +12,4 @@ export const authApi = {
 
   requestPasswordReset: (email: string) =>
     apiClient.post('/auth/forgot-password', { email }).then(() => undefined),
-};
+}

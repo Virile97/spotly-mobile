@@ -2,4 +2,4 @@ export const LIMITS = {
   POST_CAPTION_MAX_LENGTH: 2200,
   COMMENT_MAX_LENGTH: 500,
   MAX_MEDIA_PER_POST: 10,
-} as const;
+} as const

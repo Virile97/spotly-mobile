@@ -1,15 +1,15 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { postsApi } from '@/features/posts/api/posts.api';
-import type { CreatePostPayload } from '@/features/posts/types/post.types';
+import { postsApi } from '@/features/posts/api/posts.api'
+import type { CreatePostPayload } from '@/features/posts/types/post.types'
 
 export function useCreatePost() {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (payload: CreatePostPayload) => postsApi.createPost(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['feed'] });
+      queryClient.invalidateQueries({ queryKey: ['feed'] })
     },
-  });
+  })
 }

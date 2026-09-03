@@ -1,11 +1,11 @@
-import { apiClient } from '@/core/api/client';
+import { apiClient } from '@/core/api/client'
 
 export interface AppNotification {
-  id: string;
-  type: 'comment' | 'reaction' | 'follow';
-  message: string;
-  isRead: boolean;
-  createdAt: string;
+  id: string
+  type: 'comment' | 'reaction' | 'follow'
+  message: string
+  isRead: boolean
+  createdAt: string
 }
 
 export const notificationsApi = {
@@ -14,4 +14,4 @@ export const notificationsApi = {
 
   markAsRead: (notificationId: string) =>
     apiClient.patch(`/notifications/${notificationId}/read`).then(() => undefined),
-};
+}

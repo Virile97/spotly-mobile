@@ -1,26 +1,26 @@
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { Stack } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
+import { useEffect } from 'react'
 
-import { AppProvider } from '@/providers/AppProvider';
-import { useAppFonts } from '@/shared/hooks/useAppFonts';
-import { useAppStoreHasHydrated } from '@/store/app.store';
+import { AppProvider } from '@/providers/AppProvider'
+import { useAppFonts } from '@/shared/hooks/useAppFonts'
+import { useAppStoreHasHydrated } from '@/store/app.store'
 
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const [fontsLoaded, fontError] = useAppFonts();
-  const hasHydrated = useAppStoreHasHydrated();
-  const isReady = (fontsLoaded || fontError) && hasHydrated;
+  const [fontsLoaded, fontError] = useAppFonts()
+  const hasHydrated = useAppStoreHasHydrated()
+  const isReady = (fontsLoaded || fontError) && hasHydrated
 
   useEffect(() => {
     if (isReady) {
-      SplashScreen.hideAsync();
+      SplashScreen.hideAsync()
     }
-  }, [isReady]);
+  }, [isReady])
 
   if (!isReady) {
-    return null;
+    return null
   }
 
   return (
@@ -33,5 +33,5 @@ export default function RootLayout() {
         <Stack.Screen name="+not-found" />
       </Stack>
     </AppProvider>
-  );
+  )
 }

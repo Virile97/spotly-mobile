@@ -1,16 +1,16 @@
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Modal, Pressable, StyleSheet, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
+import { useAppTheme } from '@/providers/ThemeProvider'
 
 interface BottomSheetProps {
-  visible: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
+  visible: boolean
+  onClose: () => void
+  children: React.ReactNode
 }
 
 export function BottomSheet({ visible, onClose, children }: BottomSheetProps) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
@@ -32,7 +32,7 @@ export function BottomSheet({ visible, onClose, children }: BottomSheetProps) {
         </SafeAreaView>
       </Pressable>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -51,4 +51,4 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginBottom: 12,
   },
-});
+})

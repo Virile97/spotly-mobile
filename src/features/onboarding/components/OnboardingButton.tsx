@@ -1,18 +1,18 @@
-import { Pressable, StyleSheet, Text, type PressableProps, type StyleProp, type ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, Text, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
 
-import { palette } from '@/theme/colors';
-import { fontFamily } from '@/theme/fonts';
-import { radius, spacing } from '@/theme/spacing';
-import { fontSize } from '@/theme/typography';
+import { palette } from '@/theme/colors'
+import { fontFamily } from '@/theme/fonts'
+import { radius, spacing } from '@/theme/spacing'
+import { fontSize } from '@/theme/typography'
 
 interface OnboardingButtonProps extends Omit<PressableProps, 'children' | 'style'> {
-  label: string;
-  variant?: 'filled' | 'outline';
-  style?: StyleProp<ViewStyle>;
+  label: string
+  variant?: 'filled' | 'outline'
+  style?: StyleProp<ViewStyle>
 }
 
 export function OnboardingButton({ label, variant = 'filled', style, ...rest }: OnboardingButtonProps) {
-  const isFilled = variant === 'filled';
+  const isFilled = variant === 'filled'
 
   return (
     <Pressable
@@ -21,7 +21,7 @@ export function OnboardingButton({ label, variant = 'filled', style, ...rest }: 
       {...rest}>
       <Text style={[styles.label, isFilled ? styles.labelFilled : styles.labelOutline]}>{label}</Text>
     </Pressable>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
   labelOutline: {
     color: palette.white,
   },
-});
+})

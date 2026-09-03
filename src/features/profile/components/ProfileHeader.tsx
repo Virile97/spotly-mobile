@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { Avatar } from '@/shared/components/ui';
-import type { UserProfile } from '@/features/profile/api/profile.api';
-import { ProfileStats } from './ProfileStats';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { Avatar } from '@/shared/components/ui'
+import type { UserProfile } from '@/features/profile/api/profile.api'
+import { ProfileStats } from './ProfileStats'
 
 export function ProfileHeader({ profile }: { profile: UserProfile }) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <View style={{ padding: theme.spacing.md }}>
@@ -23,7 +23,7 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
         <Text style={{ color: theme.colors.textSecondary, marginTop: theme.spacing.xs }}>{profile.bio}</Text>
       ) : null}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-});
+})

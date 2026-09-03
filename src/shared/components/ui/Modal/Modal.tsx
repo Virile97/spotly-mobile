@@ -1,13 +1,13 @@
-import { Modal as RNModal, Pressable, StyleSheet, View, type ModalProps as RNModalProps } from 'react-native';
+import { Modal as RNModal, Pressable, StyleSheet, View, type ModalProps as RNModalProps } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
+import { useAppTheme } from '@/providers/ThemeProvider'
 
 interface ModalProps extends Pick<RNModalProps, 'visible' | 'children'> {
-  onClose: () => void;
+  onClose: () => void
 }
 
 export function Modal({ visible, onClose, children }: ModalProps) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <RNModal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
@@ -22,7 +22,7 @@ export function Modal({ visible, onClose, children }: ModalProps) {
         </View>
       </Pressable>
     </RNModal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -35,4 +35,4 @@ const styles = StyleSheet.create({
   content: {
     minWidth: '80%',
   },
-});
+})

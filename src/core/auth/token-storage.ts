@@ -1,7 +1,7 @@
-import { secureStorage } from '@/core/storage/secure-storage';
+import { secureStorage } from '@/core/storage/secure-storage'
 
-const ACCESS_TOKEN_KEY = 'auth.accessToken';
-const REFRESH_TOKEN_KEY = 'auth.refreshToken';
+const ACCESS_TOKEN_KEY = 'auth.accessToken'
+const REFRESH_TOKEN_KEY = 'auth.refreshToken'
 
 export const tokenStorage = {
   getAccessToken: () => secureStorage.getItem(ACCESS_TOKEN_KEY),
@@ -12,6 +12,6 @@ export const tokenStorage = {
     await Promise.all([
       secureStorage.removeItem(ACCESS_TOKEN_KEY),
       secureStorage.removeItem(REFRESH_TOKEN_KEY),
-    ]);
+    ])
   },
-};
+}

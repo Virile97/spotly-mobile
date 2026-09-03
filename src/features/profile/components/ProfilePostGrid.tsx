@@ -1,10 +1,10 @@
-import { Image } from 'expo-image';
-import { Dimensions, FlatList, StyleSheet } from 'react-native';
+import { Image } from 'expo-image'
+import { Dimensions, FlatList, StyleSheet } from 'react-native'
 
-import type { Post } from '@/features/posts/types/post.types';
+import type { Post } from '@/features/posts/types/post.types'
 
-const { width } = Dimensions.get('window');
-const TILE_SIZE = width / 3;
+const { width } = Dimensions.get('window')
+const TILE_SIZE = width / 3
 
 export function ProfilePostGrid({ posts }: { posts: Post[] }) {
   return (
@@ -18,7 +18,7 @@ export function ProfilePostGrid({ posts }: { posts: Post[] }) {
         ) : null
       }
     />
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
     width: TILE_SIZE,
     height: TILE_SIZE,
   },
-});
+})

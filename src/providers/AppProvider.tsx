@@ -1,11 +1,11 @@
-import type { ReactNode } from 'react';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import type { ReactNode } from 'react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
-import { AuthProvider } from './AuthProvider';
-import { QueryProvider } from './QueryProvider';
-import { SocketProvider } from './SocketProvider';
-import { ThemeProvider } from './ThemeProvider';
+import { AuthProvider } from './AuthProvider'
+import { QueryProvider } from './QueryProvider'
+import { SocketProvider } from './SocketProvider'
+import { ThemeProvider } from './ThemeProvider'
 
 export function AppProvider({ children }: { children: ReactNode }) {
   return (
@@ -20,5 +20,5 @@ export function AppProvider({ children }: { children: ReactNode }) {
         </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
-  );
+  )
 }

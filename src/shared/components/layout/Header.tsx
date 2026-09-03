@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
+import { useAppTheme } from '@/providers/ThemeProvider'
 
 interface HeaderProps {
-  title: string;
-  right?: React.ReactNode;
+  title: string
+  right?: React.ReactNode
 }
 
 export function Header({ title, right }: HeaderProps) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <View
@@ -21,7 +21,7 @@ export function Header({ title, right }: HeaderProps) {
       </Text>
       {right}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-});
+})

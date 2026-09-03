@@ -1,19 +1,19 @@
-import { useMutation } from '@tanstack/react-query';
-import { Link } from 'expo-router';
-import { useState } from 'react';
-import { Text } from 'react-native';
+import { useMutation } from '@tanstack/react-query'
+import { Link } from 'expo-router'
+import { useState } from 'react'
+import { Text } from 'react-native'
 
-import { authApi } from '@/features/auth/api/auth.api';
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { Screen } from '@/shared/components/layout/Screen';
-import { Button, Input } from '@/shared/components/ui';
+import { authApi } from '@/features/auth/api/auth.api'
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { Screen } from '@/shared/components/layout/Screen'
+import { Button, Input } from '@/shared/components/ui'
 
 export default function ForgotPasswordScreen() {
-  const { theme } = useAppTheme();
-  const [email, setEmail] = useState('');
+  const { theme } = useAppTheme()
+  const [email, setEmail] = useState('')
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: () => authApi.requestPasswordReset(email),
-  });
+  })
 
   return (
     <Screen scroll>
@@ -42,5 +42,5 @@ export default function ForgotPasswordScreen() {
         Back to login
       </Link>
     </Screen>
-  );
+  )
 }

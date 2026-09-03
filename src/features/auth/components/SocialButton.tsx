@@ -1,18 +1,18 @@
-import { Pressable, StyleSheet, Text, View, type PressableProps } from 'react-native';
+import { Pressable, StyleSheet, Text, View, type PressableProps } from 'react-native'
 
-import { palette } from '@/theme/colors';
-import { fontFamily } from '@/theme/fonts';
-import { radius, spacing } from '@/theme/spacing';
-import { fontSize } from '@/theme/typography';
+import { palette } from '@/theme/colors'
+import { fontFamily } from '@/theme/fonts'
+import { radius, spacing } from '@/theme/spacing'
+import { fontSize } from '@/theme/typography'
 
 interface SocialButtonProps extends Omit<PressableProps, 'children'> {
-  label: string;
-  icon?: React.ReactNode;
-  variant?: 'solid' | 'outline';
+  label: string
+  icon?: React.ReactNode
+  variant?: 'solid' | 'outline'
 }
 
 export function SocialButton({ label, icon, variant = 'outline', style, ...rest }: SocialButtonProps) {
-  const isSolid = variant === 'solid';
+  const isSolid = variant === 'solid'
 
   return (
     <Pressable
@@ -26,7 +26,7 @@ export function SocialButton({ label, icon, variant = 'outline', style, ...rest 
       {icon ? <View style={styles.icon}>{icon}</View> : null}
       <Text style={[styles.label, isSolid ? styles.labelSolid : styles.labelOutline]}>{label}</Text>
     </Pressable>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -58,4 +58,4 @@ const styles = StyleSheet.create({
   labelOutline: {
     color: palette.white,
   },
-});
+})

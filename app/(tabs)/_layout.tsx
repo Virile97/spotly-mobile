@@ -1,9 +1,9 @@
-import { Tabs } from 'expo-router';
+import { Tabs } from 'expo-router'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
+import { useAppTheme } from '@/providers/ThemeProvider'
 
 export default function TabsLayout() {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <Tabs
@@ -19,5 +19,5 @@ export default function TabsLayout() {
       <Tabs.Screen name="notifications" options={{ title: 'Notifications' }} />
       <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
     </Tabs>
-  );
+  )
 }

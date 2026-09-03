@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Animated, StyleSheet, type ViewStyle } from 'react-native';
+import { useEffect, useState } from 'react'
+import { Animated, StyleSheet, type ViewStyle } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
+import { useAppTheme } from '@/providers/ThemeProvider'
 
 interface SkeletonProps {
-  width?: number | `${number}%`;
-  height?: number;
-  style?: ViewStyle;
+  width?: number | `${number}%`
+  height?: number
+  style?: ViewStyle
 }
 
 export function Skeleton({ width = '100%', height = 16, style }: SkeletonProps) {
-  const { theme } = useAppTheme();
-  const [opacity] = useState(() => new Animated.Value(0.4));
+  const { theme } = useAppTheme()
+  const [opacity] = useState(() => new Animated.Value(0.4))
 
   useEffect(() => {
     const loop = Animated.loop(
@@ -19,10 +19,10 @@ export function Skeleton({ width = '100%', height = 16, style }: SkeletonProps) 
         Animated.timing(opacity, { toValue: 1, duration: 600, useNativeDriver: true }),
         Animated.timing(opacity, { toValue: 0.4, duration: 600, useNativeDriver: true }),
       ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [opacity]);
+    )
+    loop.start()
+    return () => loop.stop()
+  }, [opacity])
 
   return (
     <Animated.View
@@ -38,9 +38,9 @@ export function Skeleton({ width = '100%', height = 16, style }: SkeletonProps) 
         style,
       ]}
     />
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   base: {},
-});
+})

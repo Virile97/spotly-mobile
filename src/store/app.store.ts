@@ -1,10 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 interface AppState {
-  isOnboarded: boolean;
-  setOnboarded: (value: boolean) => void;
+  isOnboarded: boolean
+  setOnboarded: (value: boolean) => void
 }
 
 export const useAppStore = create<AppState>()(
@@ -18,20 +18,20 @@ export const useAppStore = create<AppState>()(
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({ isOnboarded: state.isOnboarded }),
       onRehydrateStorage: () => () => {
-        useHasHydratedStore.setState({ hasHydrated: true });
+        useHasHydratedStore.setState({ hasHydrated: true })
       },
     }
   )
-);
+)
 
 interface HasHydratedState {
-  hasHydrated: boolean;
+  hasHydrated: boolean
 }
 
 const useHasHydratedStore = create<HasHydratedState>(() => ({
   hasHydrated: false,
-}));
+}))
 
 export function useAppStoreHasHydrated(): boolean {
-  return useHasHydratedStore((state) => state.hasHydrated);
+  return useHasHydratedStore((state) => state.hasHydrated)
 }

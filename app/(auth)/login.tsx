@@ -1,17 +1,17 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Link, useRouter } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons'
+import { Link, useRouter } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { LoginForm } from '@/features/auth/components/LoginForm';
-import { palette } from '@/theme/colors';
-import { fontFamily } from '@/theme/fonts';
-import { spacing } from '@/theme/spacing';
-import { fontSize } from '@/theme/typography';
+import { LoginForm } from '@/features/auth/components/LoginForm'
+import { palette } from '@/theme/colors'
+import { fontFamily } from '@/theme/fonts'
+import { spacing } from '@/theme/spacing'
+import { fontSize } from '@/theme/typography'
 
 export default function LoginScreen() {
-  const router = useRouter();
+  const router = useRouter()
 
   return (
     <View style={styles.container}>
@@ -38,7 +38,7 @@ export default function LoginScreen() {
         </View>
       </SafeAreaView>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sm,
     fontFamily: fontFamily.bodySemiBold,
   },
-});
+})

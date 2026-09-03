@@ -1,32 +1,32 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'expo-router'
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 
-import { AuthTextField } from '@/features/auth/components/AuthTextField';
-import { useLogin } from '@/features/auth/hooks/useLogin';
-import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/login.schema';
-import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton';
-import { palette } from '@/theme/colors';
-import { fontFamily } from '@/theme/fonts';
-import { spacing } from '@/theme/spacing';
-import { fontSize } from '@/theme/typography';
+import { AuthTextField } from '@/features/auth/components/AuthTextField'
+import { useLogin } from '@/features/auth/hooks/useLogin'
+import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/login.schema'
+import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
+import { palette } from '@/theme/colors'
+import { fontFamily } from '@/theme/fonts'
+import { spacing } from '@/theme/spacing'
+import { fontSize } from '@/theme/typography'
 
 export function LoginForm() {
-  const router = useRouter();
-  const { mutate, isPending } = useLogin();
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const router = useRouter()
+  const { mutate, isPending } = useLogin()
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const { control, handleSubmit } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
-  });
+  })
 
   const onSubmit = (values: LoginFormValues) => {
-    setSubmitError(null);
-    mutate(values, { onError: (err) => setSubmitError(err.message) });
-  };
+    setSubmitError(null)
+    mutate(values, { onError: (err) => setSubmitError(err.message) })
+  }
 
   return (
     <View style={styles.container}>
@@ -75,7 +75,7 @@ export function LoginForm() {
         disabled={isPending}
       />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
     flex: 0,
     width: '100%',
   },
-});
+})

@@ -1,11 +1,11 @@
-import { Link, Stack } from 'expo-router';
+import { Link, Stack } from 'expo-router'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { Screen } from '@/shared/components/layout/Screen';
-import { EmptyState } from '@/shared/components/feedback/EmptyState';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { Screen } from '@/shared/components/layout/Screen'
+import { EmptyState } from '@/shared/components/feedback/EmptyState'
 
 export default function NotFoundScreen() {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <>
@@ -17,5 +17,5 @@ export default function NotFoundScreen() {
         </Link>
       </Screen>
     </>
-  );
+  )
 }

@@ -1,18 +1,18 @@
-import { createContext, useContext, useMemo, type ReactNode } from 'react';
-import { useColorScheme } from 'react-native';
+import { createContext, useContext, useMemo, type ReactNode } from 'react'
+import { useColorScheme } from 'react-native'
 
-import { darkTheme, lightTheme, type Theme } from '@/theme';
+import { darkTheme, lightTheme, type Theme } from '@/theme'
 
 interface ThemeContextValue {
-  theme: Theme;
-  colorScheme: 'light' | 'dark';
+  theme: Theme
+  colorScheme: 'light' | 'dark'
 }
 
-const ThemeContext = createContext<ThemeContextValue | null>(null);
+const ThemeContext = createContext<ThemeContextValue | null>(null)
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const systemScheme = useColorScheme();
-  const colorScheme = systemScheme === 'dark' ? 'dark' : 'light';
+  const systemScheme = useColorScheme()
+  const colorScheme = systemScheme === 'dark' ? 'dark' : 'light'
 
   const value = useMemo<ThemeContextValue>(
     () => ({
@@ -20,15 +20,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       colorScheme,
     }),
     [colorScheme]
-  );
+  )
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
 
 export function useAppTheme(): ThemeContextValue {
-  const context = useContext(ThemeContext);
+  const context = useContext(ThemeContext)
   if (!context) {
-    throw new Error('useAppTheme must be used within a ThemeProvider');
+    throw new Error('useAppTheme must be used within a ThemeProvider')
   }
-  return context;
+  return context
 }

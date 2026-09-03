@@ -1,5 +1,5 @@
-export { FeedItem } from './components/FeedItem';
-export { FeedList } from './components/FeedList';
-export { FeedSkeleton } from './components/FeedSkeleton';
-export { useFeed } from './hooks/useFeed';
-export type { FeedItem as FeedItemType, FeedParams } from './types/feed.types';
+export { FeedItem } from './components/FeedItem'
+export { FeedList } from './components/FeedList'
+export { FeedSkeleton } from './components/FeedSkeleton'
+export { useFeed } from './hooks/useFeed'
+export type { FeedItem as FeedItemType, FeedParams } from './types/feed.types'

@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native';
+import { useState } from 'react'
+import { Pressable, StyleSheet, Text, TextInput, View, type TextInputProps } from 'react-native'
 
-import { palette } from '@/theme/colors';
-import { fontFamily } from '@/theme/fonts';
-import { radius, spacing } from '@/theme/spacing';
-import { fontSize } from '@/theme/typography';
+import { palette } from '@/theme/colors'
+import { fontFamily } from '@/theme/fonts'
+import { radius, spacing } from '@/theme/spacing'
+import { fontSize } from '@/theme/typography'
 
 interface AuthTextFieldProps extends Omit<TextInputProps, 'style'> {
-  label: string;
-  error?: string;
-  isPassword?: boolean;
+  label: string
+  error?: string
+  isPassword?: boolean
 }
 
 export function AuthTextField({ label, error, isPassword, secureTextEntry, ...rest }: AuthTextFieldProps) {
-  const [isRevealed, setIsRevealed] = useState(false);
+  const [isRevealed, setIsRevealed] = useState(false)
 
   return (
     <View style={styles.container}>
@@ -33,7 +33,7 @@ export function AuthTextField({ label, error, isPassword, secureTextEntry, ...re
       </View>
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
     fontSize: fontSize.xs,
     fontFamily: fontFamily.body,
   },
-});
+})

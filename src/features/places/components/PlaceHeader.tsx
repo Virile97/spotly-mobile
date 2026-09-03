@@ -1,12 +1,12 @@
-import { Image } from 'expo-image';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image } from 'expo-image'
+import { StyleSheet, Text, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import type { Place } from '@/features/places/types/place.types';
-import { PlaceStatus } from './PlaceStatus';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import type { Place } from '@/features/places/types/place.types'
+import { PlaceStatus } from './PlaceStatus'
 
 export function PlaceHeader({ place }: { place: Place }) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <View>
@@ -23,7 +23,7 @@ export function PlaceHeader({ place }: { place: Place }) {
         </View>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
   },
-});
+})

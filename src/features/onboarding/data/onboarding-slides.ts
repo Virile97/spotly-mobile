@@ -1,11 +1,11 @@
-import type { ImageSource } from 'expo-image';
+import type { ImageSource } from 'expo-image'
 
 export interface OnboardingSlideData {
-  id: string;
-  image: ImageSource;
-  badgeText?: string;
-  title: string;
-  description: string;
+  id: string
+  image: ImageSource
+  badgeText?: string
+  title: string
+  description: string
 }
 
 export const onboardingSlides: OnboardingSlideData[] = [
@@ -28,4 +28,4 @@ export const onboardingSlides: OnboardingSlideData[] = [
     title: 'Find your next destination.',
     description: 'Get personalized recommendations based on what people like you love.',
   },
-];
+]

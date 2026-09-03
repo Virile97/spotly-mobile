@@ -1,30 +1,30 @@
-import { AntDesign, Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { AntDesign, Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
+import { StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { SocialButton } from '@/features/auth/components/SocialButton';
-import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton';
-import { palette } from '@/theme/colors';
-import { fontFamily } from '@/theme/fonts';
-import { spacing } from '@/theme/spacing';
-import { fontSize } from '@/theme/typography';
+import { SocialButton } from '@/features/auth/components/SocialButton'
+import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
+import { palette } from '@/theme/colors'
+import { fontFamily } from '@/theme/fonts'
+import { spacing } from '@/theme/spacing'
+import { fontSize } from '@/theme/typography'
 
 export function WelcomeScreen() {
-  const router = useRouter();
+  const router = useRouter()
 
   const continueWithGoogle = () => {
     // TODO: wire up Google OAuth
-  };
+  }
 
   const continueWithApple = () => {
     // TODO: wire up Apple OAuth
-  };
+  }
 
   const continueWithEmail = () => {
-    router.push('/(auth)/login');
-  };
+    router.push('/(auth)/login')
+  }
 
   return (
     <View style={styles.container}>
@@ -77,7 +77,7 @@ export function WelcomeScreen() {
         </View>
       </SafeAreaView>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -150,4 +150,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: spacing.sm,
   },
-});
+})

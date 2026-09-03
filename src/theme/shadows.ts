@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform } from 'react-native'
 
 export const shadows = {
   sm: Platform.select({
@@ -31,4 +31,4 @@ export const shadows = {
     android: { elevation: 6 },
     default: {},
   }),
-} as const;
+} as const

@@ -1,19 +1,19 @@
-import { useRouter } from 'expo-router';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useRouter } from 'expo-router'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-import { useLogout } from '@/features/auth/hooks/useLogout';
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { Screen } from '@/shared/components/layout/Screen';
+import { useLogout } from '@/features/auth/hooks/useLogout'
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { Screen } from '@/shared/components/layout/Screen'
 
 const SETTINGS_LINKS = [
   { href: '/settings/account', label: 'Account' },
   { href: '/settings/privacy', label: 'Privacy' },
-] as const;
+] as const
 
 export default function SettingsScreen() {
-  const { theme } = useAppTheme();
-  const router = useRouter();
-  const { mutate: logout } = useLogout();
+  const { theme } = useAppTheme()
+  const router = useRouter()
+  const { mutate: logout } = useLogout()
 
   return (
     <Screen>
@@ -33,11 +33,11 @@ export default function SettingsScreen() {
         </TouchableOpacity>
       </View>
     </Screen>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   row: {
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-});
+})

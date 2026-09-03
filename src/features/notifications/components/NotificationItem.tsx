@@ -1,16 +1,16 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
-import { formatRelativeTime } from '@/shared/utils/date';
-import type { AppNotification } from '@/features/notifications/api/notifications.api';
+import { useAppTheme } from '@/providers/ThemeProvider'
+import { formatRelativeTime } from '@/shared/utils/date'
+import type { AppNotification } from '@/features/notifications/api/notifications.api'
 
 interface NotificationItemProps {
-  notification: AppNotification;
-  onPress: () => void;
+  notification: AppNotification
+  onPress: () => void
 }
 
 export function NotificationItem({ notification, onPress }: NotificationItemProps) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <TouchableOpacity onPress={onPress} style={[styles.row, { paddingVertical: theme.spacing.sm }]}>
@@ -27,7 +27,7 @@ export function NotificationItem({ notification, onPress }: NotificationItemProp
         </Text>
       </View>
     </TouchableOpacity>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -40,4 +40,4 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
   },
-});
+})

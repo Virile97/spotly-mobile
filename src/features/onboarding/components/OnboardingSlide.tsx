@@ -1,21 +1,21 @@
-import { LinearGradient } from 'expo-linear-gradient';
-import { Image, type ImageSource } from 'expo-image';
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient'
+import { Image, type ImageSource } from 'expo-image'
+import { StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { palette } from '@/theme/colors';
-import { fontFamily } from '@/theme/fonts';
-import { spacing } from '@/theme/spacing';
-import { fontSize } from '@/theme/typography';
+import { palette } from '@/theme/colors'
+import { fontFamily } from '@/theme/fonts'
+import { spacing } from '@/theme/spacing'
+import { fontSize } from '@/theme/typography'
 
 interface OnboardingSlideProps {
-  image: ImageSource;
-  badgeText?: string;
-  title: string;
-  description: string;
-  step: number;
-  stepCount: number;
-  footerLabel?: string;
+  image: ImageSource
+  badgeText?: string
+  title: string
+  description: string
+  step: number
+  stepCount: number
+  footerLabel?: string
 }
 
 export function OnboardingSlide({
@@ -67,7 +67,7 @@ export function OnboardingSlide({
         </Text>
       ) : null}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -145,4 +145,4 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.body,
     letterSpacing: 1,
   },
-});
+})

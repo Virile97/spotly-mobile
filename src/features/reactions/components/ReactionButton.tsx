@@ -1,14 +1,14 @@
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
+import { useAppTheme } from '@/providers/ThemeProvider'
 
 interface ReactionButtonProps {
-  isActive: boolean;
-  onPress: () => void;
+  isActive: boolean
+  onPress: () => void
 }
 
 export function ReactionButton({ isActive, onPress }: ReactionButtonProps) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <TouchableOpacity onPress={onPress} accessibilityRole="button">
@@ -16,5 +16,5 @@ export function ReactionButton({ isActive, onPress }: ReactionButtonProps) {
         {isActive ? 'Reacted' : 'React'}
       </Text>
     </TouchableOpacity>
-  );
+  )
 }

@@ -1,14 +1,14 @@
-import { StyleSheet, TextInput, View, Text, type TextInputProps } from 'react-native';
+import { StyleSheet, TextInput, View, Text, type TextInputProps } from 'react-native'
 
-import { useAppTheme } from '@/providers/ThemeProvider';
+import { useAppTheme } from '@/providers/ThemeProvider'
 
 interface InputProps extends TextInputProps {
-  label?: string;
-  error?: string;
+  label?: string
+  error?: string
 }
 
 export function Input({ label, error, style, ...rest }: InputProps) {
-  const { theme } = useAppTheme();
+  const { theme } = useAppTheme()
 
   return (
     <View>
@@ -33,11 +33,11 @@ export function Input({ label, error, style, ...rest }: InputProps) {
         <Text style={{ color: theme.colors.error, marginTop: theme.spacing.xs }}>{error}</Text>
       ) : null}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   base: {
     borderWidth: StyleSheet.hairlineWidth,
   },
-});
+})
