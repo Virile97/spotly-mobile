@@ -22,7 +22,7 @@ export default function OnboardingScreen() {
 
   const finishOnboarding = () => {
     setOnboarded(true);
-    router.replace('/(auth)/login');
+    router.replace('/(auth)/welcome');
   };
 
   const goToNext = () => {

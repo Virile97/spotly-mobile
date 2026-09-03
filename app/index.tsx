@@ -11,5 +11,5 @@ export default function RootIndex() {
     return <LoadingState />;
   }
 
-  return <Redirect href={isOnboarded ? '/(auth)/login' : '/onboarding'} />;
+  return <Redirect href={isOnboarded ? '/(auth)/welcome' : '/onboarding'} />;
 }
