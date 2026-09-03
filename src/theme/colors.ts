@@ -16,6 +16,8 @@ export const palette = {
   red500: '#EF4444',
   green500: '#22C55E',
   yellow500: '#EAB308',
+  pink400: '#E07EBB',
+  pink500: '#D6499D',
 } as const;
 
 export interface ThemeColors {
