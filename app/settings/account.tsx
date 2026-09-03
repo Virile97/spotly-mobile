@@ -10,15 +10,15 @@ import { Button, Input } from '@/shared/components/ui'
 export default function AccountSettingsScreen() {
   const { theme } = useAppTheme()
   const user = useAuthStore((state) => state.user)
-  const [username, setUsername] = useState(user?.username ?? '')
+  const [displayName, setDisplayName] = useState(user?.displayName ?? '')
   const { mutate, isPending, isSuccess } = useUpdateProfile()
 
   return (
     <Screen scroll>
-      <Input label="Username" value={username} onChangeText={setUsername} />
+      <Input label="Display name" value={displayName} onChangeText={setDisplayName} />
       <Button
         label="Save"
-        onPress={() => mutate({ username })}
+        onPress={() => mutate({ displayName })}
         loading={isPending}
         style={{ marginTop: theme.spacing.md }}
       />

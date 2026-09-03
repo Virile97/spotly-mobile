@@ -1,14 +1,29 @@
+export type Gender = 'MALE' | 'FEMALE' | 'OTHER' | 'PREFER_NOT_TO_SAY'
+export type MaritalStatus = 'SINGLE' | 'MARRIED'
+
 export interface AuthUser {
   id: string
-  email: string
-  username: string
+  firstName: string
+  middleName: string | null
+  lastName: string
+  displayName: string
+  nickname: string | null
+  gender: Gender
+  birthdate: string
+  maritalStatus: MaritalStatus | null
+  isActive: boolean
+  bio: string | null
   avatarUrl: string | null
+}
+
+export interface AuthTokens {
+  accessToken: string
+  refreshToken: string
 }
 
 export interface AuthSession {
   user: AuthUser
-  accessToken: string
-  refreshToken: string
+  tokens: AuthTokens
 }
 
 export interface LoginPayload {
@@ -17,14 +32,16 @@ export interface LoginPayload {
 }
 
 export interface RegisterPayload {
+  email: string
+  password: string
+  displayName: string
+  nickname?: string
   firstName: string
   middleName?: string
   lastName: string
-  email: string
-  contactNumber: string
+  gender: Gender
   birthdate: string
-  gender: string
-  maritalStatus: string
-  address: string
-  password: string
+  contactNo?: string
+  address?: string
+  maritalStatus?: MaritalStatus
 }

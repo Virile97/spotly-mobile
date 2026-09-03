@@ -2,13 +2,14 @@ import { StyleSheet, Text, View } from 'react-native'
 
 import { useAppTheme } from '@/providers/ThemeProvider'
 import { Button } from '@/shared/components/ui'
+import { ERROR_MESSAGES } from '@/shared/constants/error-messages'
 
 interface ErrorStateProps {
   message?: string
   onRetry?: () => void
 }
 
-export function ErrorState({ message = 'Something went wrong', onRetry }: ErrorStateProps) {
+export function ErrorState({ message = ERROR_MESSAGES.GENERIC, onRetry }: ErrorStateProps) {
   const { theme } = useAppTheme()
 
   return (

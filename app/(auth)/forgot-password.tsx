@@ -8,8 +8,10 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { z } from 'zod'
 
+import { ApiError } from '@/core/api/api-error'
 import { authApi } from '@/features/auth/api/auth.api'
 import { AuthTextField } from '@/features/auth/components/AuthTextField'
+import { FormError } from '@/features/auth/components/FormError'
 import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
 import { DismissKeyboardView } from '@/shared/components/layout/DismissKeyboardView'
 import { palette } from '@/theme/colors'
@@ -68,7 +70,9 @@ export default function ForgotPasswordScreen() {
             />
 
             {isSuccess ? <Text style={styles.successText}>Check your email for a reset link.</Text> : null}
-            {error ? <Text style={styles.errorText}>{error.message}</Text> : null}
+            {error ? (
+              <FormError message={error.message} issues={error instanceof ApiError ? error.issues : undefined} />
+            ) : null}
           </View>
 
           <View style={styles.actions}>
@@ -138,11 +142,6 @@ const styles = StyleSheet.create({
   },
   successText: {
     color: palette.green500,
-    fontSize: fontSize.sm,
-    fontFamily: fontFamily.body,
-  },
-  errorText: {
-    color: palette.red500,
     fontSize: fontSize.sm,
     fontFamily: fontFamily.body,
   },

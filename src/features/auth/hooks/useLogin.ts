@@ -12,8 +12,8 @@ export function useLogin() {
     mutationFn: (payload: LoginPayload) => authApi.login(payload),
     onSuccess: async (session) => {
       await Promise.all([
-        tokenStorage.setAccessToken(session.accessToken),
-        tokenStorage.setRefreshToken(session.refreshToken),
+        tokenStorage.setAccessToken(session.tokens.accessToken),
+        tokenStorage.setRefreshToken(session.tokens.refreshToken),
       ])
       setUser(session.user)
     },

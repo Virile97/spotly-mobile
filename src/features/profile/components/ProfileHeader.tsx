@@ -11,13 +11,13 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
   return (
     <View style={{ padding: theme.spacing.md }}>
       <View style={styles.row}>
-        <Avatar uri={profile.avatarUrl} fallback={profile.username} size={72} />
+        <Avatar uri={profile.avatarUrl} fallback={profile.displayName} size={72} />
         <View style={{ flex: 1, marginLeft: theme.spacing.md }}>
           <ProfileStats stats={profile.stats} />
         </View>
       </View>
       <Text style={{ color: theme.colors.text, fontWeight: theme.fontWeight.semibold, marginTop: theme.spacing.sm }}>
-        {profile.username}
+        {profile.displayName}
       </Text>
       {profile.bio ? (
         <Text style={{ color: theme.colors.textSecondary, marginTop: theme.spacing.xs }}>{profile.bio}</Text>

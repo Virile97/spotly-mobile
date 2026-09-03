@@ -1,26 +1,26 @@
-import { FlatList } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 
-import { EmptyState } from '@/shared/components/feedback/EmptyState'
-import { ErrorState } from '@/shared/components/feedback/ErrorState'
-import { useFeed } from '@/features/feed/hooks/useFeed'
+import { mockPosts } from '@/features/feed/data/mock-posts'
 import { FeedItem } from './FeedItem'
-import { FeedSkeleton } from './FeedSkeleton'
 
 export function FeedList() {
-  const { data, isLoading, isError, refetch, fetchNextPage, hasNextPage } = useFeed()
-  const posts = data?.pages.flatMap((page) => page.items) ?? []
-
-  if (isLoading) return <FeedSkeleton />
-  if (isError) return <ErrorState onRetry={() => refetch()} />
-  if (posts.length === 0) return <EmptyState title="No posts yet" description="Follow places and people to see their posts here." />
-
   return (
     <FlatList
-      data={posts}
+      data={mockPosts}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <FeedItem post={item} />}
-      onEndReached={() => hasNextPage && fetchNextPage()}
-      onEndReachedThreshold={0.5}
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
+      showsVerticalScrollIndicator={false}
     />
   )
 }
+
+const styles = StyleSheet.create({
+  separator: {
+    height: 1,
+    marginHorizontal: 16,
+    borderStyle: 'dashed',
+    borderTopWidth: 1,
+    borderColor: 'rgba(255,255,255,0.15)',
+  },
+})

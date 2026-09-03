@@ -13,7 +13,7 @@ export interface UserProfile extends AuthUser {
 }
 
 export interface UpdateProfilePayload {
-  username?: string
+  displayName?: string
   bio?: string
   avatarUrl?: string
 }

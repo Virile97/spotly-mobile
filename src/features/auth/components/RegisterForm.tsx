@@ -1,32 +1,30 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
+import { ApiError } from '@/core/api/api-error'
 import { AuthTextField } from '@/features/auth/components/AuthTextField'
 import { DateField } from '@/features/auth/components/DateField'
 import { DropdownField } from '@/features/auth/components/DropdownField'
+import { FormError } from '@/features/auth/components/FormError'
 import { PillSelect } from '@/features/auth/components/PillSelect'
 import { useRegister } from '@/features/auth/hooks/useRegister'
 import { genderOptions, maritalStatusOptions, registerSchema, type RegisterFormValues } from '@/features/auth/schemas/register.schema'
 import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
 import { toISODateString } from '@/shared/utils/date'
-import { palette } from '@/theme/colors'
-import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
-import { fontSize } from '@/theme/typography'
 
 const GENDER_LABELS: Record<(typeof genderOptions)[number], string> = {
-  female: 'Female',
-  male: 'Male',
-  other: 'Other',
+  MALE: 'Male',
+  FEMALE: 'Female',
+  OTHER: 'Other',
+  PREFER_NOT_TO_SAY: 'Prefer not to say',
 }
 
 const MARITAL_STATUS_LABELS: Record<(typeof maritalStatusOptions)[number], string> = {
-  single: 'Single',
-  married: 'Married',
-  divorced: 'Divorced',
-  widowed: 'Widowed',
+  SINGLE: 'Single',
+  MARRIED: 'Married',
 }
 
 const genderPillOptions = genderOptions.map((value) => ({ value, label: GENDER_LABELS[value] }))
@@ -37,29 +35,63 @@ const maritalStatusDropdownOptions = maritalStatusOptions.map((value) => ({
 
 export function RegisterForm() {
   const { mutate, isPending } = useRegister()
-  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitError, setSubmitError] = useState<ApiError | Error | null>(null)
 
   const { control, handleSubmit } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
+      email: '',
+      password: '',
+      displayName: '',
+      nickname: '',
       firstName: '',
       middleName: '',
       lastName: '',
-      email: '',
-      contactNumber: '',
       birthdate: '',
+      contactNo: '',
       address: '',
-      password: '',
     },
   })
 
   const onSubmit = (values: RegisterFormValues) => {
     setSubmitError(null)
-    mutate(values, { onError: (err) => setSubmitError(err.message) })
+    const payload = {
+      ...values,
+      nickname: values.nickname || undefined,
+      middleName: values.middleName || undefined,
+      contactNo: values.contactNo || undefined,
+      address: values.address || undefined,
+    }
+    mutate(payload, { onError: (err) => setSubmitError(err) })
   }
 
   return (
     <View style={styles.container}>
+      <Controller
+        control={control}
+        name="displayName"
+        render={({ field, fieldState }) => (
+          <AuthTextField
+            label="Display name"
+            value={field.value}
+            onChangeText={field.onChange}
+            error={fieldState.error?.message}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="nickname"
+        render={({ field, fieldState }) => (
+          <AuthTextField
+            label="Nickname (optional)"
+            autoCapitalize="none"
+            value={field.value}
+            onChangeText={field.onChange}
+            error={fieldState.error?.message}
+          />
+        )}
+      />
       <Controller
         control={control}
         name="firstName"
@@ -107,10 +139,10 @@ export function RegisterForm() {
       />
       <Controller
         control={control}
-        name="contactNumber"
+        name="contactNo"
         render={({ field, fieldState }) => (
           <AuthTextField
-            label="Contact number"
+            label="Contact number (optional)"
             keyboardType="phone-pad"
             value={field.value}
             onChangeText={field.onChange}
@@ -149,7 +181,7 @@ export function RegisterForm() {
         name="maritalStatus"
         render={({ field, fieldState }) => (
           <DropdownField
-            label="Marital status"
+            label="Marital status (optional)"
             placeholder="Select marital status"
             options={maritalStatusDropdownOptions}
             value={field.value}
@@ -163,7 +195,7 @@ export function RegisterForm() {
         name="address"
         render={({ field, fieldState }) => (
           <AuthTextField
-            label="Address"
+            label="Address (optional)"
             value={field.value}
             onChangeText={field.onChange}
             error={fieldState.error?.message}
@@ -184,7 +216,12 @@ export function RegisterForm() {
         )}
       />
 
-      {submitError ? <Text style={styles.submitError}>{submitError}</Text> : null}
+      {submitError ? (
+        <FormError
+          message={submitError.message}
+          issues={submitError instanceof ApiError ? submitError.issues : undefined}
+        />
+      ) : null}
 
       <OnboardingButton
         label="Create account"
@@ -200,11 +237,6 @@ export function RegisterForm() {
 const styles = StyleSheet.create({
   container: {
     gap: spacing.md,
-  },
-  submitError: {
-    color: palette.red500,
-    fontSize: fontSize.sm,
-    fontFamily: fontFamily.body,
   },
   submitButton: {
     flex: 0,
