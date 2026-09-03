@@ -34,8 +34,6 @@ export interface LoginPayload {
 export interface RegisterPayload {
   email: string
   password: string
-  displayName: string
-  nickname?: string
   firstName: string
   middleName?: string
   lastName: string

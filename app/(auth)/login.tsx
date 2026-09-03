@@ -99,6 +99,7 @@ export default function LoginScreen() {
               style={styles.submitButton}
               onPress={handleSubmit(onSubmit)}
               disabled={isPending}
+              loading={isPending}
             />
 
             <View style={styles.footer}>

@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Pressable,
   StyleSheet,
   Text,
@@ -19,12 +20,15 @@ interface OnboardingButtonProps extends Omit<
   label: string;
   variant?: "filled" | "outline";
   style?: StyleProp<ViewStyle>;
+  loading?: boolean;
 }
 
 export function OnboardingButton({
   label,
   variant = "filled",
   style,
+  loading = false,
+  disabled,
   ...rest
 }: OnboardingButtonProps) {
   const isFilled = variant === "filled";
@@ -32,17 +36,23 @@ export function OnboardingButton({
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityState={{ disabled: disabled || loading, busy: loading }}
       style={[styles.base, isFilled ? styles.filled : styles.outline, style]}
+      disabled={disabled || loading}
       {...rest}
     >
-      <Text
-        style={[
-          styles.label,
-          isFilled ? styles.labelFilled : styles.labelOutline
-        ]}
-      >
-        {label}
-      </Text>
+      {loading ? (
+        <ActivityIndicator size="small" color={palette.white} />
+      ) : (
+        <Text
+          style={[
+            styles.label,
+            isFilled ? styles.labelFilled : styles.labelOutline
+          ]}
+        >
+          {label}
+        </Text>
+      )}
     </Pressable>
   );
 }

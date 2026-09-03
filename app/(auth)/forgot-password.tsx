@@ -82,6 +82,7 @@ export default function ForgotPasswordScreen() {
               style={styles.submitButton}
               onPress={handleSubmit(onSubmit)}
               disabled={isPending}
+              loading={isPending}
             />
 
             <View style={styles.footer}>
