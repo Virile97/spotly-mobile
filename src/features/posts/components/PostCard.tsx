@@ -7,6 +7,7 @@ import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
 import { fontSize } from '@/theme/typography'
 import { PostActions } from './PostActions'
+import { PostCaption } from './PostCaption'
 import { PostHeader } from './PostHeader'
 import { PostMedia } from './PostMedia'
 
@@ -21,10 +22,11 @@ export function PostCard({ post }: { post: Post }) {
 
       <View style={styles.body}>
         {post.caption ? (
-          <Text style={styles.caption}>
-            {post.caption}
-            {post.placeName ? <Text style={styles.placeName}> {' '}📍 {post.placeName}</Text> : null}
-          </Text>
+          <PostCaption
+            caption={post.caption}
+            placeName={post.placeName}
+            onMentionPress={(username) => router.push(`/users/${username}`)}
+          />
         ) : null}
 
         {post.isOpen !== null ? (
@@ -51,22 +53,13 @@ export function PostCard({ post }: { post: Post }) {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    paddingVertical: spacing.lg,
     backgroundColor: '#0A090B',
   },
   body: {
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
     gap: spacing.xs,
-  },
-  caption: {
-    color: palette.white,
-    fontSize: fontSize.sm,
-    fontFamily: fontFamily.body,
-    lineHeight: 20,
-  },
-  placeName: {
-    color: palette.pink500,
-    fontFamily: fontFamily.bodySemiBold,
   },
   statusRow: {
     flexDirection: 'row',

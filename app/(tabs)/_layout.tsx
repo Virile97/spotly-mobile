@@ -1,54 +1,66 @@
 import { Ionicons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
+import type { ComponentProps } from 'react'
+import { type ColorValue } from 'react-native'
 
-import { palette } from '@/theme/colors'
+import { ScrollCollapseProvider } from '@/providers/ScrollCollapseProvider'
+import { FloatingTabBar } from '@/shared/components/layout/FloatingTabBar'
+
+type IoniconName = ComponentProps<typeof Ionicons>['name']
 
 export default function TabsLayout() {
   return (
+    <ScrollCollapseProvider>
+      <TabsNavigator />
+    </ScrollCollapseProvider>
+  )
+}
+
+function TabsNavigator() {
+  return (
     <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-        tabBarActiveTintColor: palette.white,
-        tabBarInactiveTintColor: 'rgba(255,255,255,0.4)',
-        tabBarStyle: { backgroundColor: '#0A090B', borderTopColor: 'rgba(255,255,255,0.1)' },
-      }}>
+      screenOptions={{ headerShown: false }}
+      tabBar={(props) => <FloatingTabBar {...props} />}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, size }) => <Ionicons name="home" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon name="home-outline" color={color} />,
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
           title: 'Explore',
-          tabBarIcon: ({ color, size }) => <Ionicons name="compass-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon name="compass-outline" color={color} />,
         }}
       />
       <Tabs.Screen
         name="create"
         options={{
           title: 'Create',
-          tabBarIcon: ({ color, size }) => <Ionicons name="add-circle-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon name="add" color={color} size={28} />,
         }}
       />
       <Tabs.Screen
         name="saved"
         options={{
           title: 'Saved',
-          tabBarIcon: ({ color, size }) => <Ionicons name="bookmark-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon name="bookmark-outline" color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color, size }) => <Ionicons name="person-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <TabIcon name="person-outline" color={color} />,
         }}
       />
       <Tabs.Screen name="notifications" options={{ href: null }} />
     </Tabs>
   )
+}
+
+function TabIcon({ name, color, size = 22 }: { name: IoniconName; color: ColorValue; size?: number }) {
+  return <Ionicons name={name} size={size} color={color} />
 }

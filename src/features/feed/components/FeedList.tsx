@@ -1,26 +1,41 @@
-import { FlatList, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from "react-native";
+import Animated from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { mockPosts } from '@/features/feed/data/mock-posts'
-import { FeedItem } from './FeedItem'
+import { mockPosts } from "@/features/feed/data/mock-posts";
+import { useScrollCollapse } from "@/providers/ScrollCollapseProvider";
+import { getTabBarOverlayHeight } from "@/shared/constants/tab-bar";
+import { spacing } from "@/theme/spacing";
+import { FeedItem } from "./FeedItem";
 
-export function FeedList() {
+interface FeedListProps {
+  topInset?: number;
+}
+
+export function FeedList({ topInset = 0 }: FeedListProps) {
+  const insets = useSafeAreaInsets();
+  const { onScroll } = useScrollCollapse();
+
   return (
-    <FlatList
+    <Animated.FlatList
       data={mockPosts}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <FeedItem post={item} />}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
+      contentContainerStyle={{
+        paddingTop: topInset,
+        paddingBottom: getTabBarOverlayHeight(insets.bottom) + spacing.md
+      }}
+      onScroll={onScroll}
+      scrollEventThrottle={16}
       showsVerticalScrollIndicator={false}
     />
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   separator: {
-    height: 1,
-    marginHorizontal: 16,
-    borderStyle: 'dashed',
-    borderTopWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
-  },
-})
+    height: spacing.xs,
+    backgroundColor: "rgba(255,255,255,0.05)"
+  }
+});
