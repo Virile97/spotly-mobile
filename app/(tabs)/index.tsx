@@ -74,7 +74,7 @@ export default function FeedScreen() {
           {/* TODO: temporary logout entry point for testing; move into settings/profile menu */}
           <Pressable
             accessibilityRole="button"
-            style={styles.notificationButton}
+            style={styles.iconButton}
             disabled={isLoggingOut}
             onPress={() => logout()}
           >
@@ -83,7 +83,17 @@ export default function FeedScreen() {
 
           <Pressable
             accessibilityRole="button"
-            style={styles.notificationButton}
+            accessibilityLabel="Search"
+            style={styles.iconButton}
+            onPress={() => router.push("/(tabs)/explore")}
+          >
+            <Ionicons name="search-outline" size={20} color={palette.white} />
+          </Pressable>
+
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Notifications"
+            style={styles.iconButton}
             onPress={() => router.push("/(tabs)/notifications")}
           >
             <Ionicons
@@ -116,7 +126,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.sm,
-    backgroundColor: "#0A090B"
+    backgroundColor: "transparent"
   },
   brand: {
     color: palette.white,
@@ -127,7 +137,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: spacing.sm
   },
-  notificationButton: {
+  iconButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
