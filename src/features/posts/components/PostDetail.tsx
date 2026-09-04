@@ -76,18 +76,24 @@ export function PostDetail({ post }: PostDetailProps) {
 
         <View style={styles.body}>
           <View style={styles.authorRow}>
-            <Avatar
-              uri={post.author.avatarUrl}
-              fallback={post.author.username}
-              size={40}
-              backgroundColor="rgba(255,255,255,0.12)"
-              color="rgba(255,255,255,0.8)"
-            />
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`Open ${post.author.username}'s profile`}
+              style={styles.authorHit}
+              onPress={() => router.push(`/users/${post.author.id}`)}>
+              <Avatar
+                uri={post.author.avatarUrl}
+                fallback={post.author.username}
+                size={40}
+                backgroundColor="rgba(255,255,255,0.12)"
+                color="rgba(255,255,255,0.8)"
+              />
 
-            <View style={styles.authorInfo}>
-              <Text style={styles.authorName}>{post.author.username}</Text>
-              <Text style={styles.timestamp}>{formatRelativeTime(post.createdAt)}</Text>
-            </View>
+              <View style={styles.authorInfo}>
+                <Text style={styles.authorName}>{post.author.username}</Text>
+                <Text style={styles.timestamp}>{formatRelativeTime(post.createdAt)}</Text>
+              </View>
+            </Pressable>
 
             <Pressable
               accessibilityRole="button"
@@ -186,6 +192,12 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   authorRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  authorHit: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,

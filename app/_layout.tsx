@@ -47,8 +47,14 @@ export default function RootLayout() {
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="search" />
+        <Stack.Screen name="messages" />
+        <Stack.Screen name="activity" />
+        <Stack.Screen name="together" />
+        <Stack.Screen name="saved" />
+        <Stack.Screen name="collections/[collectionId]" />
         <Stack.Screen name="posts/[postId]" />
         <Stack.Screen name="places/[placeId]" />
+        <Stack.Screen name="settings" />
         <Stack.Screen name="+not-found" />
       </Stack>
     </AppProvider>

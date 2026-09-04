@@ -56,11 +56,7 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
   const [isFollowing, setIsFollowing] = useState(false)
 
   const profile = getMockProfile(userId) ?? mockOwnProfile
-  const isOwn =
-    !userId ||
-    userId === currentUser?.id ||
-    userId === mockOwnProfile.id ||
-    userId === mockOwnProfile.username
+  const isOwn = !userId || userId === currentUser?.id
 
   const displayName = isOwn && currentUser?.displayName ? currentUser.displayName : profile.displayName
 
@@ -184,14 +180,17 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
                 <Text style={styles.updateLabel}>Update profile</Text>
               </Pressable>
             ) : (
-              <Pressable
-                accessibilityRole="button"
-                style={[styles.updateButton, !isFollowing && styles.followButton]}
-                onPress={() => setIsFollowing((current) => !current)}>
-                <Text style={[styles.updateLabel, !isFollowing && styles.followLabel]}>
-                  {isFollowing ? 'Following' : 'Follow'}
-                </Text>
-              </Pressable>
+              <>
+                <Pressable
+                  accessibilityRole="button"
+                  style={[styles.updateButton, isFollowing && styles.followButtonMuted]}
+                  onPress={() => setIsFollowing((current) => !current)}>
+                  <Text style={styles.updateLabel}>{isFollowing ? 'Following' : 'Follow'}</Text>
+                </Pressable>
+                <Pressable accessibilityRole="button" style={styles.messageButton}>
+                  <Text style={styles.messageLabel}>Message</Text>
+                </Pressable>
+              </>
             )}
             <Pressable accessibilityRole="button" accessibilityLabel="Share profile" style={styles.shareButton} onPress={onShare}>
               <Ionicons name="share-social-outline" size={18} color={palette.white} />
@@ -199,28 +198,30 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
           </View>
         </View>
 
-        <View style={styles.tabs}>
-          {TABS.map((item) => {
-            const isActive = item === tab
-            return (
-              <Pressable
-                key={item}
-                accessibilityRole="tab"
-                accessibilityState={{ selected: isActive }}
-                onPress={() => setTab(item)}
-                style={styles.tab}>
-                <Text style={[styles.tabLabel, isActive && styles.tabLabelActive]}>{item}</Text>
-                {isActive ? <View style={styles.tabUnderline} /> : null}
-              </Pressable>
-            )
-          })}
-        </View>
+        {isOwn ? (
+          <View style={styles.tabs}>
+            {TABS.map((item) => {
+              const isActive = item === tab
+              return (
+                <Pressable
+                  key={item}
+                  accessibilityRole="tab"
+                  accessibilityState={{ selected: isActive }}
+                  onPress={() => setTab(item)}
+                  style={styles.tab}>
+                  <Text style={[styles.tabLabel, isActive && styles.tabLabelActive]}>{item}</Text>
+                  {isActive ? <View style={styles.tabUnderline} /> : null}
+                </Pressable>
+              )
+            })}
+          </View>
+        ) : null}
 
-        {tab === 'Posts' ? (
+        {!isOwn || tab === 'Posts' ? (
           postTiles.length === 0 ? (
             <Text style={styles.empty}>No posts yet</Text>
           ) : (
-            <View style={styles.grid}>
+            <View style={[styles.grid, !isOwn && styles.gridSolo]}>
               {postTiles.map((tile) => (
                 <Pressable
                   key={tile.key}
@@ -234,7 +235,7 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
           )
         ) : null}
 
-        {tab === 'Places' ? (
+        {isOwn && tab === 'Places' ? (
           places.length === 0 ? (
             <Text style={styles.empty}>No tagged places yet</Text>
           ) : (
@@ -256,7 +257,7 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
           )
         ) : null}
 
-        {tab === 'Saved' ? <Text style={styles.empty}>No saved posts yet</Text> : null}
+        {isOwn && tab === 'Saved' ? <Text style={styles.empty}>No saved posts yet</Text> : null}
       </ScrollView>
     </View>
   )
@@ -386,11 +387,22 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sm,
     fontFamily: fontFamily.bodySemiBold,
   },
-  followButton: {
-    backgroundColor: palette.pink500,
+  followButtonMuted: {
+    opacity: 0.7,
   },
-  followLabel: {
-    color: palette.black,
+  messageButton: {
+    flex: 1,
+    height: 36,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  messageLabel: {
+    color: palette.white,
+    fontSize: fontSize.sm,
+    fontFamily: fontFamily.bodySemiBold,
   },
   shareButton: {
     width: 36,
@@ -436,6 +448,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: GRID_GAP,
     marginTop: GRID_GAP,
+  },
+  gridSolo: {
+    marginTop: spacing.md,
   },
   tile: {
     overflow: 'hidden',

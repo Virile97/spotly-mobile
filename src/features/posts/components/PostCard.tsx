@@ -23,13 +23,7 @@ export function PostCard({ post, onPress }: { post: Post; onPress?: () => void }
 
   return (
     <View style={styles.container}>
-      <Pressable
-        accessibilityRole={onPress ? 'button' : undefined}
-        accessibilityLabel={onPress ? `Open post by ${post.author.username}` : undefined}
-        disabled={!onPress}
-        onPress={onPress}>
-        <PostHeader post={post} />
-      </Pressable>
+      <PostHeader post={post} />
 
       <PostMedia uris={post.mediaUrls} onPress={onPress ? () => onPress() : undefined} />
 

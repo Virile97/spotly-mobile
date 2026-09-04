@@ -16,7 +16,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useLogout } from "@/features/auth/hooks/useLogout";
 import { FeedList } from "@/features/feed/components/FeedList";
 import { useScrollCollapse } from "@/providers/ScrollCollapseProvider";
 import { palette } from "@/theme/colors";
@@ -28,7 +27,6 @@ const hasUnreadNotifications = true;
 
 export default function FeedScreen() {
   const router = useRouter();
-  const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const { collapsed } = useScrollCollapse();
   const insets = useSafeAreaInsets();
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -72,39 +70,38 @@ export default function FeedScreen() {
           <Text style={styles.brand}>Spotly</Text>
 
           <View style={styles.headerActions}>
-          {/* TODO: temporary logout entry point for testing; move into settings/profile menu */}
-          <Pressable
-            accessibilityRole="button"
-            style={styles.iconButton}
-            disabled={isLoggingOut}
-            onPress={() => logout()}
-          >
-            <Ionicons name="log-out-outline" size={20} color={palette.white} />
-          </Pressable>
-
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Search"
             style={styles.iconButton}
             onPress={() => router.push("/search" as Href)}
           >
-            <Ionicons name="search-outline" size={20} color={palette.white} />
+            <Ionicons name="search-outline" size={24} color={palette.white} />
           </Pressable>
 
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Notifications"
             style={styles.iconButton}
-            onPress={() => router.push("/(tabs)/notifications")}
+            onPress={() => router.push("/activity" as Href)}
           >
             <Ionicons
               name="notifications-outline"
-              size={20}
+              size={24}
               color={palette.white}
             />
             {hasUnreadNotifications ? (
               <View style={styles.notificationDot} />
             ) : null}
+          </Pressable>
+
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Messages"
+            style={styles.iconButton}
+            onPress={() => router.push("/messages" as Href)}
+          >
+            <Ionicons name="chatbubble-ellipses-outline" size={24} color={palette.white} />
           </Pressable>
           </View>
         </View>
@@ -128,7 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent"
   },
   headerBar: {
-    height: 40,
+    height: 44,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
@@ -154,8 +151,8 @@ const styles = StyleSheet.create({
   },
   notificationDot: {
     position: "absolute",
-    top: 9,
-    right: 10,
+    top: 8,
+    right: 8,
     width: 8,
     height: 8,
     borderRadius: 4,

@@ -19,7 +19,7 @@ export const mockPlaces: Place[] = [
   {
     id: 'place-coffee-house',
     name: 'Coffee House',
-    address: 'Magsaysay Avenue, Naga City',
+    address: 'Elias Angeles St, Naga City',
     latitude: 13.6288,
     longitude: 123.1912,
     isOpenNow: true,

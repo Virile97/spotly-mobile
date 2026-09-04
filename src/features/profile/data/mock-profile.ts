@@ -22,6 +22,7 @@ export interface ProfileView {
   displayName: string
   username: string
   location: string | null
+  distanceKm?: number
   bio: string | null
   avatarUrl: string | null
   coverImageUrl: string | null
@@ -34,6 +35,7 @@ export const mockOwnProfile: ProfileView = {
   displayName: 'Joshua Bautista',
   username: 'joshua',
   location: 'Naga City',
+  distanceKm: 2,
   bio: 'Coffee first, mountains after. Mapping the good spots around Bicol.',
   avatarUrl: avatarJoshua,
   coverImageUrl: coverJoshua,
@@ -56,9 +58,15 @@ export const mockProfiles: ProfileView[] = [
     displayName: 'Maria Reyes',
     username: 'maria',
     location: 'Bicol',
+    distanceKm: 2.1,
     bio: 'Chasing sunrises and hidden coves.',
     avatarUrl: coverCafe,
     coverImageUrl: coverDestination,
+    interests: [
+      { emoji: '🌄', label: 'Sunrise' },
+      { emoji: '📸', label: 'Photography' },
+      { emoji: '🏖️', label: 'Travel' },
+    ],
     stats: { postCount: 142, followerCount: 890, followingCount: 210 },
   },
   {
@@ -66,9 +74,14 @@ export const mockProfiles: ProfileView[] = [
     displayName: 'John Alcala',
     username: 'john',
     location: 'Naga',
+    distanceKm: 3.4,
     bio: 'Always down for a food trip.',
     avatarUrl: coverShare,
     coverImageUrl: coverCafe,
+    interests: [
+      { emoji: '🍜', label: 'Food' },
+      { emoji: '☕', label: 'Coffee' },
+    ],
     stats: { postCount: 86, followerCount: 420, followingCount: 180 },
   },
   {
@@ -76,9 +89,14 @@ export const mockProfiles: ProfileView[] = [
     displayName: 'Kenji Santos',
     username: 'kenji',
     location: 'Naga',
+    distanceKm: 1.8,
     bio: 'Ramen first, everything else later.',
     avatarUrl: coverCafe,
     coverImageUrl: coverShare,
+    interests: [
+      { emoji: '🍜', label: 'Ramen' },
+      { emoji: '☕', label: 'Coffee' },
+    ],
     stats: { postCount: 64, followerCount: 310, followingCount: 95 },
   },
   {
@@ -86,9 +104,14 @@ export const mockProfiles: ProfileView[] = [
     displayName: 'Aliyah Cruz',
     username: 'aliyah',
     location: 'Naga',
+    distanceKm: 0.9,
     bio: 'Quiet cafes and long walks.',
     avatarUrl: coverShare,
     coverImageUrl: coverCafe,
+    interests: [
+      { emoji: '☕', label: 'Coffee' },
+      { emoji: '📚', label: 'Work' },
+    ],
     stats: { postCount: 58, followerCount: 240, followingCount: 120 },
   },
   {
@@ -96,9 +119,14 @@ export const mockProfiles: ProfileView[] = [
     displayName: 'Diego Ramos',
     username: 'diego',
     location: 'Bicol',
+    distanceKm: 14.1,
     bio: 'Trails, falls, and weekend rides.',
     avatarUrl: coverDestination,
     coverImageUrl: coverDestination,
+    interests: [
+      { emoji: '💧', label: 'Hikes' },
+      { emoji: '📸', label: 'Photography' },
+    ],
     stats: { postCount: 31, followerCount: 156, followingCount: 88 },
   },
 ]

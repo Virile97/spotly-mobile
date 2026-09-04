@@ -46,10 +46,10 @@ function TabsNavigator() {
         }}
       />
       <Tabs.Screen
-        name="saved"
+        name="activities"
         options={{
-          title: 'Saved',
-          tabBarIcon: ({ color }) => <TabIcon name="bookmark-outline" color={color} />,
+          title: 'Activities',
+          tabBarIcon: ({ color }) => <TabIcon name="people-outline" color={color} />,
         }}
       />
       <Tabs.Screen
