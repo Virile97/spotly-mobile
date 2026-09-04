@@ -1,18 +1,20 @@
-import { io } from 'socket.io-client'
+import { io } from "socket.io-client"
 
-import { env } from '@/config/env'
-import type { RealtimeSocket } from './socket.types'
+import { env } from "@/config/env"
+import type { RealtimeSocket } from "./socket.types"
 
 let socket: RealtimeSocket | null = null
 
 export function createSocket(token: string): RealtimeSocket {
   destroySocket()
+
   socket = io(env.socketUrl, {
     auth: { token },
     autoConnect: false,
     reconnection: false,
-    transports: ['websocket'],
+    transports: ["websocket"]
   })
+
   return socket
 }
 

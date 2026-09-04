@@ -1,7 +1,7 @@
-import type { Socket } from 'socket.io-client'
+import type { Socket } from "socket.io-client"
 
-import type { Profile } from '@/features/profile/types/profile.types'
-import { SOCKET_EVENTS } from './socket-events'
+import type { Profile } from "@/features/profile/types/profile.types"
+import { SOCKET_EVENTS } from "./socket-events"
 
 export type ProfileUpdatedPayload = Profile
 

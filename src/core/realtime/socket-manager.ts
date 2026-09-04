@@ -1,136 +1,168 @@
-import { AppState, type AppStateStatus, type NativeEventSubscription } from 'react-native'
+import {
+  AppState,
+  type AppStateStatus,
+  type NativeEventSubscription
+} from "react-native"
 
-import { refreshSession } from '@/core/api/interceptors'
-import { authEvents } from '@/core/auth/auth-events'
-import { tokenStorage } from '@/core/auth/token-storage'
-import { createSocket, destroySocket, getSocket } from './socket'
-import type { RealtimeEvent, RealtimeHandler, RealtimeSocket } from './socket.types'
+import { refreshSession } from "@/core/api/interceptors"
+import { authEvents } from "@/core/auth/auth-events"
+import { tokenStorage } from "@/core/auth/token-storage"
 
-const BACKGROUND_MS = 30_000
+import { createSocket, destroySocket, getSocket } from "./socket"
+import type {
+  RealtimeEvent,
+  RealtimeHandler,
+  RealtimeSocket
+} from "./socket.types"
+
 const RECONNECT_MS = 1_000
-const AUTH_ERROR = 'invalid or expired access token'
+const BACKGROUND_MS = 30_000
+const AUTH_ERROR = "invalid or expired access token"
 
 type StoredHandler = (...args: never[]) => void
+type Timer = ReturnType<typeof setTimeout>
 
 let enabled = false
-let connectId = 0
-let reconnectTimer: ReturnType<typeof setTimeout> | null = null
-let backgroundTimer: ReturnType<typeof setTimeout> | null = null
+let connectionId = 0
+let reconnectTimer: Timer | null = null
+let backgroundTimer: Timer | null = null
 let appStateSub: NativeEventSubscription | null = null
 
 const listeners = new Map<RealtimeEvent, Set<StoredHandler>>()
 
-function clearTimer(timer: ReturnType<typeof setTimeout> | null) {
+const clear = (timer: Timer | null) => {
   if (timer) clearTimeout(timer)
 }
 
-function events(target: RealtimeSocket | null) {
-  return target as unknown as {
-    on: (event: string, handler: StoredHandler) => void
-    off: (event: string, handler: StoredHandler) => void
+const socketEvents = (socket: RealtimeSocket | null) =>
+  socket as unknown as {
+    on(event: string, handler: StoredHandler): void
+    off(event: string, handler: StoredHandler): void
   } | null
-}
 
-function attachListeners(next: RealtimeSocket) {
+function attachListeners(socket: RealtimeSocket) {
   listeners.forEach((handlers, event) => {
-    handlers.forEach((handler) => events(next)?.on(event, handler))
+    handlers.forEach((handler) => socketEvents(socket)?.on(event, handler))
   })
 }
 
 async function connect() {
-  const id = ++connectId
-  clearTimer(reconnectTimer)
+  const id = ++connectionId
+
+  clear(reconnectTimer)
   reconnectTimer = null
 
   const token = await tokenStorage.getAccessToken()
-  if (!enabled || id !== connectId || !token) return
+
+  if (!enabled || id !== connectionId || !token) return
 
   const socket = createSocket(token)
-  socket.on('connect_error', (error) => {
-    void onConnectError(error)
+
+  socket.on("connect_error", (error) => void handleConnectError(error))
+
+  socket.on("disconnect", (reason) => {
+    if (enabled && reason !== "io client disconnect") {
+      scheduleReconnect()
+    }
   })
-  socket.on('disconnect', (reason) => {
-    if (!enabled || reason === 'io client disconnect') return
-    scheduleReconnect()
-  })
+
   attachListeners(socket)
   socket.connect()
 }
 
 function scheduleReconnect() {
-  if (reconnectTimer || !enabled) return
+  if (!enabled || reconnectTimer) return
+
   reconnectTimer = setTimeout(() => {
     reconnectTimer = null
     void connect()
   }, RECONNECT_MS)
 }
 
-async function onConnectError(error: Error) {
+async function handleConnectError(error: Error) {
   if (!enabled) return
 
-  if (!error.message.toLowerCase().includes(AUTH_ERROR)) {
+  const isAuthError = error.message.toLowerCase().includes(AUTH_ERROR)
+
+  if (!isAuthError) {
     scheduleReconnect()
     return
   }
 
   try {
     await refreshSession()
+
     if (enabled) await connect()
   } catch {
     await tokenStorage.clear()
-    authEvents.emit('unauthorized')
+    authEvents.emit("unauthorized")
   }
 }
 
-function onAppState(state: AppStateStatus) {
+function handleAppState(state: AppStateStatus) {
   if (!enabled) return
 
-  if (state === 'active') {
-    clearTimer(backgroundTimer)
+  if (state === "active") {
+    clear(backgroundTimer)
     backgroundTimer = null
+
     if (!getSocket()?.connected) void connect()
     return
   }
 
-  if (state !== 'background') return
+  if (state !== "background") return
 
-  clearTimer(backgroundTimer)
+  clear(backgroundTimer)
+
   backgroundTimer = setTimeout(() => {
     backgroundTimer = null
-    connectId += 1
+    connectionId++
     destroySocket()
   }, BACKGROUND_MS)
 }
 
 function start() {
   if (enabled) return
+
   enabled = true
-  appStateSub = AppState.addEventListener('change', onAppState)
+  appStateSub = AppState.addEventListener("change", handleAppState)
+
   void connect()
 }
 
 function stop() {
   enabled = false
-  connectId += 1
-  clearTimer(reconnectTimer)
-  clearTimer(backgroundTimer)
+  connectionId++
+
+  clear(reconnectTimer)
+  clear(backgroundTimer)
+
   reconnectTimer = null
   backgroundTimer = null
+
   appStateSub?.remove()
   appStateSub = null
+
   destroySocket()
 }
 
 function on<E extends RealtimeEvent>(event: E, handler: RealtimeHandler<E>) {
   const stored = handler as StoredHandler
   const handlers = listeners.get(event) ?? new Set<StoredHandler>()
+
   handlers.add(stored)
   listeners.set(event, handlers)
-  events(getSocket())?.on(event, stored)
+
+  socketEvents(getSocket())?.on(event, stored)
 
   return () => {
     handlers.delete(stored)
-    events(getSocket())?.off(event, stored)
+
+    if (!handlers.size) {
+      listeners.delete(event)
+    }
+
+    socketEvents(getSocket())?.off(event, stored)
   }
 }
 
@@ -138,5 +170,5 @@ export const socketManager = {
   start,
   stop,
   on,
-  getSocket,
+  getSocket
 }
