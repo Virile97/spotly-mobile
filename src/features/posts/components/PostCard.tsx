@@ -40,6 +40,11 @@ export function PostCard({ post, onPress }: { post: Post; onPress?: () => void }
               caption={post.caption}
               placeName={post.placeName}
               onMentionPress={(username) => router.push(`/users/${username}`)}
+              onPlacePress={() => {
+                if (post.placeId) {
+                  router.push({ pathname: '/(tabs)/explore', params: { placeId: post.placeId } })
+                }
+              }}
             />
           ) : null}
 

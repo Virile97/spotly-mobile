@@ -38,6 +38,12 @@ const config: ExpoConfig = {
     ],
     'expo-secure-store',
     'expo-asset',
+    [
+      'expo-location',
+      {
+        locationWhenInUsePermission: 'Spotly uses your location to show nearby places and live directions.',
+      },
+    ],
     // Hidden from launch instead of waiting for the JS component to mount.
     // Android only, so the iOS status bar is left alone.
     ['expo-navigation-bar', { hidden: true, style: 'light', enforceContrast: false }],

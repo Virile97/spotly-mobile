@@ -14,6 +14,7 @@ interface PostCaptionProps {
   placeName?: string | null
   onMentionPress?: (username: string) => void
   onHashtagPress?: (tag: string) => void
+  onPlacePress?: () => void
   /** When false, the full caption is always shown. */
   truncate?: boolean
 }
@@ -23,6 +24,7 @@ export function PostCaption({
   placeName,
   onMentionPress,
   onHashtagPress,
+  onPlacePress,
   truncate = true,
 }: PostCaptionProps) {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -63,7 +65,12 @@ export function PostCaption({
         return <Text key={key}>{segment.value}</Text>
       })}
 
-      {placeName ? <Text style={styles.placeName}>{' '}📍 {placeName}</Text> : null}
+      {placeName ? (
+        <Text style={styles.placeName} onPress={onPlacePress}>
+          {' '}
+          📍 {placeName}
+        </Text>
+      ) : null}
     </>
   )
 

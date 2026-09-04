@@ -100,8 +100,14 @@ export function PostDetail({ post }: PostDetailProps) {
           {post.caption ? (
             <PostCaption
               caption={post.caption}
+              placeName={post.placeName}
               truncate={false}
               onMentionPress={(username) => router.push(`/users/${username}`)}
+              onPlacePress={() => {
+                if (post.placeId) {
+                  router.push({ pathname: '/(tabs)/explore', params: { placeId: post.placeId } })
+                }
+              }}
             />
           ) : null}
 

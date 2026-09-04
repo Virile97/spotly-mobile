@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons'
-import * as Linking from 'expo-linking'
 import { useRouter } from 'expo-router'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
@@ -18,9 +17,9 @@ export function PostPlaceCard({ post }: PostPlaceCardProps) {
 
   if (!post.placeName) return null
 
-  const openDirections = () => {
-    const query = [post.placeName, post.location].filter(Boolean).join(', ')
-    void Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`)
+  const openPlaceMap = () => {
+    if (!post.placeId) return
+    router.push({ pathname: '/(tabs)/explore', params: { placeId: post.placeId } })
   }
 
   return (
@@ -30,7 +29,11 @@ export function PostPlaceCard({ post }: PostPlaceCardProps) {
           <Text style={styles.iconEmoji}>☕</Text>
         </View>
 
-        <View style={styles.info}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Open map for ${post.placeName}`}
+          style={styles.info}
+          onPress={openPlaceMap}>
           <View style={styles.titleRow}>
             <Text style={styles.name} numberOfLines={1}>
               {post.placeName}
@@ -48,7 +51,7 @@ export function PostPlaceCard({ post }: PostPlaceCardProps) {
             {post.distanceKm !== null && post.location ? ' • ' : null}
             {post.location}
           </Text>
-        </View>
+        </Pressable>
       </View>
 
       <View style={styles.actions}>
@@ -61,7 +64,7 @@ export function PostPlaceCard({ post }: PostPlaceCardProps) {
           <Text style={styles.outlineLabel}>View Place</Text>
         </Pressable>
 
-        <Pressable accessibilityRole="button" style={styles.filledButton} onPress={openDirections}>
+        <Pressable accessibilityRole="button" style={styles.filledButton} onPress={openPlaceMap}>
           <Ionicons name="arrow-up" size={14} color={palette.white} style={styles.arrow} />
           <Text style={styles.filledLabel}>Get Directions</Text>
         </Pressable>

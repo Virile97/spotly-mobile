@@ -47,6 +47,7 @@ export default function RootLayout() {
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="posts/[postId]" />
+        <Stack.Screen name="places/[placeId]" />
         <Stack.Screen name="+not-found" />
       </Stack>
     </AppProvider>
