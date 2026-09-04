@@ -1,7 +1,11 @@
 import { useRouter } from 'expo-router'
+import { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
+import { CommentsSheet } from '@/features/comments/components/CommentsSheet'
+import { useCommentThreads } from '@/features/comments/hooks/useCommentThreads'
 import type { Post } from '@/features/posts/types/post.types'
+import { usePostReaction } from '@/features/reactions/hooks/usePostReaction'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
@@ -13,6 +17,9 @@ import { PostMedia } from './PostMedia'
 
 export function PostCard({ post }: { post: Post }) {
   const router = useRouter()
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false)
+  const { threads, commentCount, addComment } = useCommentThreads(post.id, post.commentCount)
+  const { reaction, reactionCount, select, toggleDefault } = usePostReaction(post.id, post.reactionCount)
 
   return (
     <View style={styles.container}>
@@ -41,10 +48,20 @@ export function PostCard({ post }: { post: Post }) {
       </View>
 
       <PostActions
-        reactionCount={post.reactionCount}
-        commentCount={post.commentCount}
-        onReactionPress={() => {}}
-        onCommentPress={() => router.push(`/comments/${post.id}`)}
+        reactionCount={reactionCount}
+        commentCount={commentCount}
+        selectedEmoji={reaction?.emoji ?? null}
+        onReactionPress={toggleDefault}
+        onReactionSelect={select}
+        onCommentPress={() => setIsCommentsOpen(true)}
+      />
+
+      <CommentsSheet
+        visible={isCommentsOpen}
+        onClose={() => setIsCommentsOpen(false)}
+        threads={threads}
+        commentCount={commentCount}
+        onSubmit={addComment}
       />
     </View>
   )

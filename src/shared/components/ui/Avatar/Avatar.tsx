@@ -7,9 +7,11 @@ interface AvatarProps {
   uri?: string | null
   fallback: string
   size?: number
+  backgroundColor?: string
+  color?: string
 }
 
-export function Avatar({ uri, fallback, size = 40 }: AvatarProps) {
+export function Avatar({ uri, fallback, size = 40, backgroundColor, color }: AvatarProps) {
   const { theme } = useAppTheme()
   const dimensionStyle = { width: size, height: size, borderRadius: size / 2 }
 
@@ -22,9 +24,9 @@ export function Avatar({ uri, fallback, size = 40 }: AvatarProps) {
       style={[
         styles.fallback,
         dimensionStyle,
-        { backgroundColor: theme.colors.surface },
+        { backgroundColor: backgroundColor ?? theme.colors.surface },
       ]}>
-      <Text style={{ color: theme.colors.text, fontSize: size * 0.4 }}>
+      <Text style={{ color: color ?? theme.colors.text, fontSize: size * 0.4 }}>
         {fallback.slice(0, 2).toUpperCase()}
       </Text>
     </View>

@@ -37,22 +37,39 @@ export function toISODateString(date: Date): string {
   return `${year}-${month}-${day}`
 }
 
+const RELATIVE_UNITS = [
+  { limit: 60, suffix: "m" },
+  { limit: 24, suffix: "h" },
+  { limit: 7, suffix: "d" }
+] as const
+
 export function formatRelativeTime(date: string | Date): string {
   const target = new Date(date)
   const diff = Math.floor((Date.now() - target.getTime()) / 1000)
 
   if (diff < 60) return "just now"
 
-  const units = [
-    { limit: 60, suffix: "m" },
-    { limit: 24, suffix: "h" },
-    { limit: 7, suffix: "d" }
-  ]
+  let value = diff / 60
+
+  for (const { limit, suffix } of RELATIVE_UNITS) {
+    if (value < limit) return `${Math.floor(value)}${suffix} ago`
+    value /= limit
+  }
+
+  return target.toLocaleDateString()
+}
+
+/** Compact variant for dense metadata rows, e.g. "40m" instead of "40m ago". */
+export function formatShortRelativeTime(date: string | Date): string {
+  const target = new Date(date)
+  const diff = Math.floor((Date.now() - target.getTime()) / 1000)
+
+  if (diff < 60) return "now"
 
   let value = diff / 60
 
-  for (const { limit, suffix } of units) {
-    if (value < limit) return `${Math.floor(value)}${suffix} ago`
+  for (const { limit, suffix } of RELATIVE_UNITS) {
+    if (value < limit) return `${Math.floor(value)}${suffix}`
     value /= limit
   }
 
