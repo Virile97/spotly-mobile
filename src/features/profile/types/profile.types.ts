@@ -6,6 +6,7 @@ export type ProfileImageContentType = 'image/jpeg' | 'image/png' | 'image/webp'
 export interface Profile {
   id: string
   username: string | null
+  displayName?: string | null
   firstName: string
   middleName: string | null
   lastName: string
@@ -25,6 +26,7 @@ export interface ProfileResponse {
 
 export interface UpdateProfilePayload {
   username?: string
+  displayName?: string | null
   firstName?: string
   middleName?: string | null
   lastName?: string

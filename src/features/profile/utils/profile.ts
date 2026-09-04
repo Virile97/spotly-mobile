@@ -8,7 +8,11 @@ import type {
 
 const ALLOWED_CONTENT_TYPES = new Set<ProfileImageContentType>(['image/jpeg', 'image/png', 'image/webp'])
 
-export function profileDisplayName(profile: Pick<Profile, 'firstName' | 'middleName' | 'lastName'>): string {
+export function profileDisplayName(
+  profile: Pick<Profile, 'firstName' | 'middleName' | 'lastName' | 'displayName'>
+): string {
+  const custom = profile.displayName?.trim()
+  if (custom) return custom
   return [profile.firstName, profile.middleName, profile.lastName].filter(Boolean).join(' ')
 }
 
@@ -51,6 +55,7 @@ export function resolveProfileImageContentType(
 
 export interface ProfileFormValues {
   username: string
+  displayName: string
   firstName: string
   middleName: string
   lastName: string
@@ -68,6 +73,10 @@ export function buildProfileUpdatePayload(
   const username = values.username.trim()
   if (username !== initial.username.trim() && username.length > 0) {
     payload.username = username
+  }
+
+  if (values.displayName.trim() !== initial.displayName.trim()) {
+    payload.displayName = values.displayName.trim() || null
   }
 
   if (values.firstName.trim() !== initial.firstName.trim()) {

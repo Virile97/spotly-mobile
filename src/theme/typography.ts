@@ -1,11 +1,17 @@
+import { Platform } from 'react-native'
+
+function size(px: number) {
+  return Platform.OS === 'android' ? Math.round(px * 0.875) : px
+}
+
 export const fontSize = {
-  xs: 12,
-  sm: 14,
-  md: 16,
-  lg: 20,
-  xl: 24,
-  xxl: 32,
-} as const
+  xs: size(12),
+  sm: size(14),
+  md: size(16),
+  lg: size(20),
+  xl: size(24),
+  xxl: size(32),
+}
 
 export const fontWeight = {
   regular: '400',

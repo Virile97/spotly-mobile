@@ -54,6 +54,7 @@ function StripeFill() {
 function toFormValues(profile: Profile, maritalStatus: ProfileFormValues['maritalStatus']): ProfileFormValues {
   return {
     username: profile.username ?? '',
+    displayName: profile.displayName?.trim() ?? '',
     firstName: profile.firstName,
     middleName: profile.middleName ?? '',
     lastName: profile.lastName,
@@ -85,6 +86,7 @@ export function EditProfileScreen() {
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
       username: '',
+      displayName: '',
       firstName: '',
       middleName: '',
       lastName: '',
@@ -237,6 +239,18 @@ export function EditProfileScreen() {
                 autoCorrect={false}
                 value={field.value ? `@${field.value}` : field.value}
                 onChangeText={(text) => field.onChange(text.replace(/^@/, ''))}
+                error={fieldState.error?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="displayName"
+            render={({ field, fieldState }) => (
+              <AuthTextField
+                label="Display name"
+                value={field.value}
+                onChangeText={field.onChange}
                 error={fieldState.error?.message}
               />
             )}

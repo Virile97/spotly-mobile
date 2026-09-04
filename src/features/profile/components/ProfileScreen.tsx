@@ -4,6 +4,7 @@ import { useRouter, type Href } from 'expo-router'
 import { useMemo, useState } from 'react'
 import {
   ActivityIndicator,
+  Platform,
   Pressable,
   ScrollView,
   Share,
@@ -194,50 +195,54 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
         </Cover>
 
         <View style={styles.body}>
-          {isOwn ? (
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Update profile photo"
-              style={styles.avatar}
-              onPress={() => router.push('/settings/avatar' as Href)}>
-              {avatarUrl ? (
-                <Image
-                  source={{ uri: avatarUrl }}
-                  style={StyleSheet.absoluteFill}
-                  contentFit="cover"
-                  recyclingKey={avatarUrl}
-                />
-              ) : (
-                <StripeFill />
-              )}
-            </Pressable>
-          ) : (
-            <View style={styles.avatar}>
-              {avatarUrl ? (
-                <Image
-                  source={{ uri: avatarUrl }}
-                  style={StyleSheet.absoluteFill}
-                  contentFit="cover"
-                  recyclingKey={avatarUrl}
-                />
-              ) : (
-                <StripeFill />
-              )}
-            </View>
-          )}
-
-          <Text style={styles.name}>{displayName}</Text>
-          {handleLabel ? (
-            isOwn && !profile.username ? (
+          <View style={styles.identityRow}>
+            {isOwn ? (
               <Pressable
                 accessibilityRole="button"
-                onPress={() => router.push('/settings/account' as Href)}>
-                <Text style={styles.handle}>{handleLabel}</Text>
+                accessibilityLabel="Update profile photo"
+                style={styles.avatar}
+                onPress={() => router.push('/settings/avatar' as Href)}>
+                {avatarUrl ? (
+                  <Image
+                    source={{ uri: avatarUrl }}
+                    style={StyleSheet.absoluteFill}
+                    contentFit="cover"
+                    recyclingKey={avatarUrl}
+                  />
+                ) : (
+                  <StripeFill />
+                )}
               </Pressable>
             ) : (
-              <Text style={styles.handle}>{handleLabel}</Text>
-            )
-          ) : null}
+              <View style={styles.avatar}>
+                {avatarUrl ? (
+                  <Image
+                    source={{ uri: avatarUrl }}
+                    style={StyleSheet.absoluteFill}
+                    contentFit="cover"
+                    recyclingKey={avatarUrl}
+                  />
+                ) : (
+                  <StripeFill />
+                )}
+              </View>
+            )}
+
+            <View style={styles.identityCopy}>
+              <Text style={styles.name}>{displayName}</Text>
+              {handleLabel ? (
+                isOwn && !profile.username ? (
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => router.push('/settings/account' as Href)}>
+                    <Text style={styles.handle}>{handleLabel}</Text>
+                  </Pressable>
+                ) : (
+                  <Text style={styles.handle}>{handleLabel}</Text>
+                )
+              ) : null}
+            </View>
+          </View>
 
           {profile.bio ? <Text style={styles.bio}>{profile.bio}</Text> : null}
 
@@ -357,7 +362,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0A090B',
   },
   cover: {
-    height: 148,
+    height: 200,
     backgroundColor: '#17161A',
     overflow: 'hidden',
   },
@@ -388,7 +393,12 @@ const styles = StyleSheet.create({
   },
   body: {
     paddingHorizontal: spacing.md,
-    marginTop: -44,
+    marginTop: -28,
+  },
+  identityRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 12,
   },
   avatar: {
     width: 88,
@@ -399,20 +409,27 @@ const styles = StyleSheet.create({
     borderColor: '#0A090B',
     backgroundColor: '#1C1B1F',
   },
+  identityCopy: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingBottom: 2,
+  },
   name: {
-    marginTop: spacing.sm,
     color: palette.white,
-    fontSize: fontSize.lg,
+    fontSize: Platform.OS === 'android' ? fontSize.md : fontSize.lg,
+    lineHeight: Platform.OS === 'android' ? 20 : 24,
     fontFamily: fontFamily.bodySemiBold,
+    includeFontPadding: false,
   },
   handle: {
     marginTop: 2,
     color: 'rgba(255,255,255,0.45)',
     fontSize: fontSize.sm,
+    lineHeight: 18,
     fontFamily: fontFamily.body,
   },
   bio: {
-    marginTop: spacing.sm,
+    marginTop: spacing.md,
     color: palette.white,
     fontSize: fontSize.sm,
     fontFamily: fontFamily.body,
