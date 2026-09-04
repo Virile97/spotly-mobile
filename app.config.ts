@@ -44,6 +44,13 @@ const config: ExpoConfig = {
         locationWhenInUsePermission: 'Spotly uses your location to show nearby places and live directions.',
       },
     ],
+    [
+      'expo-image-picker',
+      {
+        photosPermission: 'Spotly needs photo access to add images to your experience.',
+        cameraPermission: 'Spotly needs camera access to capture photos for your experience.',
+      },
+    ],
     // Hidden from launch instead of waiting for the JS component to mount.
     // Android only, so the iOS status bar is left alone.
     ['expo-navigation-bar', { hidden: true, style: 'light', enforceContrast: false }],

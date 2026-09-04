@@ -31,9 +31,11 @@ export function PostPlaceCard({ post }: PostPlaceCardProps) {
 
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={`Open map for ${post.placeName}`}
+          accessibilityLabel={`Open ${post.placeName}`}
           style={styles.info}
-          onPress={openPlaceMap}>
+          onPress={() => {
+            if (post.placeId) router.push(`/places/${post.placeId}`)
+          }}>
           <View style={styles.titleRow}>
             <Text style={styles.name} numberOfLines={1}>
               {post.placeName}

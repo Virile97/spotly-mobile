@@ -29,6 +29,7 @@ export function FloatingTabBar({
 }: FloatingTabBarProps) {
   const insets = useSafeAreaInsets();
   const { collapsed } = useScrollCollapse();
+  const currentRoute = state.routes[state.index]?.name;
   const bottomGap = Math.max(insets.bottom, TAB_BAR.MIN_BOTTOM_GAP);
 
   const barStyle = useAnimatedStyle(() => ({
@@ -43,6 +44,10 @@ export function FloatingTabBar({
       }
     ]
   }));
+
+  if (currentRoute === "create") {
+    return null;
+  }
 
   const items = (
     <>

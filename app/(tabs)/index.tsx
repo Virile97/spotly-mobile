@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import {
@@ -68,9 +68,10 @@ export default function FeedScreen() {
         ]}
         onLayout={onHeaderLayout}
       >
-        <Text style={styles.brand}>Spotly</Text>
+        <View style={styles.headerBar}>
+          <Text style={styles.brand}>Spotly</Text>
 
-        <View style={styles.headerActions}>
+          <View style={styles.headerActions}>
           {/* TODO: temporary logout entry point for testing; move into settings/profile menu */}
           <Pressable
             accessibilityRole="button"
@@ -85,7 +86,7 @@ export default function FeedScreen() {
             accessibilityRole="button"
             accessibilityLabel="Search"
             style={styles.iconButton}
-            onPress={() => router.push("/(tabs)/explore")}
+            onPress={() => router.push("/search" as Href)}
           >
             <Ionicons name="search-outline" size={20} color={palette.white} />
           </Pressable>
@@ -105,6 +106,7 @@ export default function FeedScreen() {
               <View style={styles.notificationDot} />
             ) : null}
           </Pressable>
+          </View>
         </View>
       </Animated.View>
     </View>
@@ -121,20 +123,27 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.sm,
     backgroundColor: "transparent"
   },
+  headerBar: {
+    height: 40,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
   brand: {
     color: palette.white,
     fontSize: fontSize.xl,
-    fontFamily: fontFamily.headline
+    lineHeight: 28,
+    fontFamily: fontFamily.headline,
+    includeFontPadding: false,
+    textAlignVertical: "center"
   },
   headerActions: {
     flexDirection: "row",
+    alignItems: "center",
     gap: spacing.sm
   },
   iconButton: {
