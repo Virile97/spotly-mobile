@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Link, useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { Controller, useForm } from 'react-hook-form'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { z } from 'zod'
 
@@ -44,7 +44,7 @@ export default function ForgotPasswordScreen() {
       <StatusBar style="light" />
       <SafeAreaView style={styles.content} edges={['top', 'bottom']}>
         <Pressable accessibilityRole="button" style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={22} color={palette.white} />
+          <Ionicons name="chevron-back" size={Platform.select({ android: 18, default: 22 })} color={palette.white} />
         </Pressable>
 
         <KeyboardActionLayout
@@ -108,9 +108,9 @@ const styles = StyleSheet.create({
     paddingTop: spacing.md,
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: Platform.select({ android: 32, default: 40 }),
+    height: Platform.select({ android: 32, default: 40 }),
+    borderRadius: Platform.select({ android: 16, default: 20 }),
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,

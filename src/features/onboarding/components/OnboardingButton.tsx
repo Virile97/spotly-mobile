@@ -62,14 +62,15 @@ const styles = StyleSheet.create({
   base: {
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: radius.lg,
-    // Android renders the label taller than iOS, so trim the padding to keep
-    // the button the same visual height across platforms.
+    borderRadius: Platform.select({ android: radius.md, default: radius.lg }),
     paddingVertical: Platform.select({
       android: spacing.sm + spacing.xs,
       default: spacing.md
     }),
-    paddingHorizontal: spacing.lg
+    paddingHorizontal: Platform.select({
+      android: spacing.md,
+      default: spacing.lg
+    })
   },
   filled: {
     flex: 1,
@@ -80,8 +81,10 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.3)"
   },
   label: {
-    fontSize: fontSize.md,
-    fontFamily: fontFamily.bodySemiBold
+    fontSize: Platform.select({ android: 13, default: fontSize.md }),
+    lineHeight: Platform.select({ android: 16, default: 20 }),
+    fontFamily: fontFamily.bodySemiBold,
+    includeFontPadding: false
   },
   labelFilled: {
     color: palette.white

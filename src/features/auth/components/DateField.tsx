@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 
+import { FloatingField } from '@/features/auth/components/FloatingField'
 import { CalendarModal } from '@/shared/components/ui'
 import { formatLongDate } from '@/shared/utils/date'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
-import { radius, spacing } from '@/theme/spacing'
 import { fontSize } from '@/theme/typography'
 
 interface DateFieldProps {
@@ -23,17 +23,18 @@ export function DateField({
   onChange,
   error,
   calendarTitle = 'Select a date',
-  placeholder = 'Select a date',
 }: DateFieldProps) {
   const [isVisible, setIsVisible] = useState(false)
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-      <Pressable accessibilityRole="button" style={styles.fieldWrapper} onPress={() => setIsVisible(true)}>
-        <Text style={value ? styles.value : styles.placeholder}>{value ? formatLongDate(value) : placeholder}</Text>
-      </Pressable>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+    <>
+      <FloatingField
+        label={label}
+        active={isVisible || Boolean(value)}
+        error={error}
+        onPress={() => setIsVisible(true)}>
+        {value ? <Text style={styles.value}>{formatLongDate(value)}</Text> : null}
+      </FloatingField>
 
       <CalendarModal
         visible={isVisible}
@@ -45,39 +46,17 @@ export function DateField({
           setIsVisible(false)
         }}
       />
-    </View>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    gap: spacing.xs,
-  },
-  label: {
-    color: 'rgba(255,255,255,0.65)',
-    fontSize: fontSize.sm,
-    fontFamily: fontFamily.bodyMedium,
-  },
-  fieldWrapper: {
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
-    borderRadius: radius.lg,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-  },
   value: {
+    paddingTop: 22,
+    paddingBottom: 8,
     color: palette.white,
     fontSize: fontSize.md,
     fontFamily: fontFamily.body,
-  },
-  placeholder: {
-    color: 'rgba(255,255,255,0.35)',
-    fontSize: fontSize.md,
-    fontFamily: fontFamily.body,
-  },
-  error: {
-    color: palette.red500,
-    fontSize: fontSize.xs,
-    fontFamily: fontFamily.body,
+    includeFontPadding: false,
   },
 })

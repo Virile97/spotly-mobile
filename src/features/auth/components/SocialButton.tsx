@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, type PressableProps } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View, type PressableProps } from 'react-native'
 
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: radius.lg,
-    paddingVertical: spacing.md,
+    borderRadius: Platform.select({ android: radius.md, default: radius.lg }),
+    paddingVertical: Platform.select({ android: spacing.sm + spacing.xs, default: spacing.md }),
     paddingHorizontal: spacing.lg,
   },
   solid: {
@@ -49,8 +49,10 @@ const styles = StyleSheet.create({
     marginRight: spacing.sm,
   },
   label: {
-    fontSize: fontSize.md,
+    fontSize: Platform.select({ android: 13, default: fontSize.md }),
+    lineHeight: Platform.select({ android: 16, default: 20 }),
     fontFamily: fontFamily.bodySemiBold,
+    includeFontPadding: false,
   },
   labelSolid: {
     color: palette.gray900,

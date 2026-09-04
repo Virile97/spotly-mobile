@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native'
 
+import { FloatingField } from '@/features/auth/components/FloatingField'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { radius, spacing } from '@/theme/spacing'
@@ -20,18 +21,20 @@ interface DropdownFieldProps {
   error?: string
 }
 
-export function DropdownField({ label, placeholder = 'Select', options, value, onChange, error }: DropdownFieldProps) {
+export function DropdownField({ label, options, value, onChange, error }: DropdownFieldProps) {
   const [isOpen, setIsOpen] = useState(false)
   const selected = options.find((option) => option.value === value)
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-      <Pressable accessibilityRole="button" style={styles.fieldWrapper} onPress={() => setIsOpen(true)}>
-        <Text style={selected ? styles.value : styles.placeholder}>{selected ? selected.label : placeholder}</Text>
-        <Text style={styles.caret}>▾</Text>
-      </Pressable>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+    <View>
+      <FloatingField
+        label={label}
+        active={isOpen || Boolean(selected)}
+        error={error}
+        onPress={() => setIsOpen(true)}
+        accessory={<Text style={styles.caret}>▾</Text>}>
+        {selected ? <Text style={styles.value}>{selected.label}</Text> : null}
+      </FloatingField>
 
       <Modal visible={isOpen} transparent animationType="fade" onRequestClose={() => setIsOpen(false)}>
         <Pressable style={styles.backdrop} onPress={() => setIsOpen(false)}>
@@ -60,42 +63,18 @@ export function DropdownField({ label, placeholder = 'Select', options, value, o
 }
 
 const styles = StyleSheet.create({
-  container: {
-    gap: spacing.xs,
-  },
-  label: {
-    color: 'rgba(255,255,255,0.65)',
-    fontSize: fontSize.sm,
-    fontFamily: fontFamily.bodyMedium,
-  },
-  fieldWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
-    borderRadius: radius.lg,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-  },
   value: {
+    paddingTop: 22,
+    paddingBottom: 8,
+    paddingRight: spacing.lg,
     color: palette.white,
     fontSize: fontSize.md,
     fontFamily: fontFamily.body,
-  },
-  placeholder: {
-    color: 'rgba(255,255,255,0.35)',
-    fontSize: fontSize.md,
-    fontFamily: fontFamily.body,
+    includeFontPadding: false,
   },
   caret: {
     color: 'rgba(255,255,255,0.5)',
     fontSize: fontSize.sm,
-  },
-  error: {
-    color: palette.red500,
-    fontSize: fontSize.xs,
-    fontFamily: fontFamily.body,
   },
   backdrop: {
     flex: 1,

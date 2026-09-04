@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
@@ -14,7 +14,7 @@ export function RegisterSuccessScreen({ onBack }: RegisterSuccessScreenProps) {
   return (
     <View style={styles.container}>
       <Pressable accessibilityRole="button" style={styles.backButton} onPress={onBack}>
-        <Ionicons name="chevron-back" size={22} color={palette.white} />
+        <Ionicons name="chevron-back" size={Platform.select({ android: 18, default: 22 })} color={palette.white} />
       </Pressable>
 
       <View style={styles.centered}>
@@ -38,9 +38,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: Platform.select({ android: 32, default: 40 }),
+    height: Platform.select({ android: 32, default: 40 }),
+    borderRadius: Platform.select({ android: 16, default: 20 }),
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,

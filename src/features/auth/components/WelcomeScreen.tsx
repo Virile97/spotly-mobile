@@ -1,7 +1,7 @@
 import { AntDesign, Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { SocialButton } from '@/features/auth/components/SocialButton'
@@ -145,9 +145,10 @@ const styles = StyleSheet.create({
   },
   terms: {
     color: 'rgba(255,255,255,0.35)',
-    fontSize: fontSize.xs,
+    fontSize: Platform.select({ android: 10, default: fontSize.xs }),
     fontFamily: fontFamily.body,
     textAlign: 'center',
     marginTop: spacing.sm,
+    includeFontPadding: false,
   },
 })
