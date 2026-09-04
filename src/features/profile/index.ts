@@ -1,5 +1,6 @@
 export { ProfileHeader } from './components/ProfileHeader'
 export { ProfilePostGrid } from './components/ProfilePostGrid'
+export { ProfileScreen } from './components/ProfileScreen'
 export { ProfileStats } from './components/ProfileStats'
 export { useProfile } from './hooks/useProfile'
 export { useUpdateProfile } from './hooks/useUpdateProfile'

@@ -1,10 +1,13 @@
 import { Ionicons } from '@expo/vector-icons'
+import { Image } from 'expo-image'
 import { Tabs } from 'expo-router'
 import type { ComponentProps } from 'react'
-import { type ColorValue } from 'react-native'
+import { StyleSheet, View, type ColorValue } from 'react-native'
 
+import { mockOwnProfile } from '@/features/profile/data/mock-profile'
 import { ScrollCollapseProvider } from '@/providers/ScrollCollapseProvider'
 import { FloatingTabBar } from '@/shared/components/layout/FloatingTabBar'
+import { palette } from '@/theme/colors'
 
 type IoniconName = ComponentProps<typeof Ionicons>['name']
 
@@ -53,7 +56,7 @@ function TabsNavigator() {
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => <TabIcon name="person-outline" color={color} />,
+          tabBarIcon: () => <ProfileTabIcon />,
         }}
       />
       <Tabs.Screen name="notifications" options={{ href: null }} />
@@ -64,3 +67,33 @@ function TabsNavigator() {
 function TabIcon({ name, color, size = 22 }: { name: IoniconName; color: ColorValue; size?: number }) {
   return <Ionicons name={name} size={size} color={color} />
 }
+
+function ProfileTabIcon() {
+  return (
+    <View style={styles.avatarRing}>
+      <Image
+        source={{ uri: mockOwnProfile.avatarUrl ?? undefined }}
+        style={styles.avatar}
+        contentFit="contain"
+      />
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  avatarRing: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    borderWidth: 1.5,
+    borderColor: palette.white,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#17161A',
+  },
+  avatar: {
+    width: 22,
+    height: 22,
+  },
+})
