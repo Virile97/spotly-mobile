@@ -16,6 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { mockPlaces } from '@/features/places/data/mock-places'
 import type { Place } from '@/features/places/types/place.types'
 import { useCreatePost } from '@/features/posts/hooks/useCreatePost'
+import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
 import { LIMITS } from '@/shared/constants/limits'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
@@ -45,7 +46,7 @@ export function CreatePostForm({ onCancel, onSuccess }: CreatePostFormProps) {
   const [placeQuery, setPlaceQuery] = useState('')
   const [placeId, setPlaceId] = useState<string | null>(null)
   const [preciseLocation, setPreciseLocation] = useState(true)
-  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitError, setSubmitError] = useState(false)
 
   const selected = media[activeIndex]
   const needle = placeQuery.trim().toLowerCase()
@@ -98,18 +99,18 @@ export function CreatePostForm({ onCancel, onSuccess }: CreatePostFormProps) {
 
   const onPost = () => {
     if (media.length === 0) {
-      setSubmitError('Add at least one photo')
+      setSubmitError(true)
       return
     }
 
-    setSubmitError(null)
+    setSubmitError(false)
     mutate(
       {
         caption: caption.trim(),
         mediaUrls: media.map((item) => item.uri),
         placeId: placeId ?? undefined,
       },
-      { onSuccess, onError: (error) => setSubmitError(error.message) }
+      { onSuccess, onError: () => setSubmitError(true) }
     )
   }
 
@@ -183,8 +184,6 @@ export function CreatePostForm({ onCancel, onSuccess }: CreatePostFormProps) {
           maxLength={LIMITS.POST_CAPTION_MAX_LENGTH}
           style={styles.caption}
         />
-
-        {submitError ? <Text style={styles.error}>{submitError}</Text> : null}
       </ScrollView>
 
       <View style={[styles.bottomBlock, { paddingBottom: Math.max(insets.bottom, spacing.md) }]}>
@@ -241,6 +240,8 @@ export function CreatePostForm({ onCancel, onSuccess }: CreatePostFormProps) {
           />
         </View>
       </View>
+
+      <ErrorModal visible={submitError} onClose={() => setSubmitError(false)} />
     </View>
   )
 }
@@ -454,11 +455,6 @@ const styles = StyleSheet.create({
   },
   preciseLabel: {
     color: palette.white,
-    fontSize: fontSize.sm,
-    fontFamily: fontFamily.body,
-  },
-  error: {
-    color: palette.red500,
     fontSize: fontSize.sm,
     fontFamily: fontFamily.body,
   },

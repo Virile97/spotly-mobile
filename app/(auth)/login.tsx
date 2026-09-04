@@ -7,13 +7,12 @@ import { Controller, useForm } from 'react-hook-form'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { ApiError } from '@/core/api/api-error'
 import { AuthTextField } from '@/features/auth/components/AuthTextField'
-import { FormError } from '@/features/auth/components/FormError'
 import { useLogin } from '@/features/auth/hooks/useLogin'
 import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/login.schema'
 import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
 import { KeyboardActionLayout } from '@/shared/components/layout/KeyboardActionLayout'
+import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
@@ -22,7 +21,7 @@ import { fontSize } from '@/theme/typography'
 export default function LoginScreen() {
   const router = useRouter()
   const { mutate, isPending } = useLogin()
-  const [submitError, setSubmitError] = useState<ApiError | Error | null>(null)
+  const [submitError, setSubmitError] = useState(false)
 
   const { control, handleSubmit } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -30,8 +29,8 @@ export default function LoginScreen() {
   })
 
   const onSubmit = (values: LoginFormValues) => {
-    setSubmitError(null)
-    mutate(values, { onError: (err) => setSubmitError(err) })
+    setSubmitError(false)
+    mutate(values, { onError: () => setSubmitError(true) })
   }
 
   return (
@@ -101,16 +100,11 @@ export default function LoginScreen() {
               onPress={() => router.push('/(auth)/forgot-password')}>
               <Text style={styles.forgotPasswordText}>Forgot password?</Text>
             </Pressable>
-
-            {submitError ? (
-              <FormError
-                message={submitError.message}
-                issues={submitError instanceof ApiError ? submitError.issues : undefined}
-              />
-            ) : null}
           </View>
         </KeyboardActionLayout>
       </SafeAreaView>
+
+      <ErrorModal visible={submitError} onClose={() => setSubmitError(false)} />
     </View>
   )
 }

@@ -120,16 +120,14 @@ export function attachInterceptors(client: AxiosInstance): void {
       }
 
       if (!error.response) {
-        const message = error.code === 'ECONNABORTED' ? ERROR_MESSAGES.TIMEOUT : ERROR_MESSAGES.NETWORK
-        return Promise.reject(new ApiError(message, 0, 'NETWORK_ERROR'))
+        return Promise.reject(new ApiError(ERROR_MESSAGES.GENERIC, 0, 'NETWORK_ERROR'))
       }
 
       const body = error.response.data?.error
-      const message = body?.message ?? error.message
       const code = body?.code
       const issues = body?.issues
 
-      return Promise.reject(new ApiError(message, status, code, issues))
+      return Promise.reject(new ApiError(ERROR_MESSAGES.GENERIC, status, code, issues))
     }
   )
 }

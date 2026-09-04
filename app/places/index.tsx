@@ -12,7 +12,7 @@ export default function PlacesScreen() {
   const { location, error: locationError } = useUserLocation()
   const { data, isLoading, isError, refetch } = useNearbyPlaces(location)
 
-  if (locationError) return <ErrorState message={locationError} />
+  if (locationError) return <ErrorState />
 
   return (
     <Screen>

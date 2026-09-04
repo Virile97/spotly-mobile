@@ -8,12 +8,11 @@ import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { z } from 'zod'
 
-import { ApiError } from '@/core/api/api-error'
 import { authApi } from '@/features/auth/api/auth.api'
 import { AuthTextField } from '@/features/auth/components/AuthTextField'
-import { FormError } from '@/features/auth/components/FormError'
 import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
 import { KeyboardActionLayout } from '@/shared/components/layout/KeyboardActionLayout'
+import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
@@ -33,7 +32,7 @@ export default function ForgotPasswordScreen() {
     defaultValues: { email: '' },
   })
 
-  const { mutate, isPending, isSuccess, error } = useMutation({
+  const { mutate, isPending, isSuccess, isError, reset } = useMutation({
     mutationFn: (values: ForgotPasswordFormValues) => authApi.requestPasswordReset(values.email),
   })
 
@@ -88,11 +87,10 @@ export default function ForgotPasswordScreen() {
           />
 
           {isSuccess ? <Text style={styles.successText}>Check your email for a reset link.</Text> : null}
-          {error ? (
-            <FormError message={error.message} issues={error instanceof ApiError ? error.issues : undefined} />
-          ) : null}
         </KeyboardActionLayout>
       </SafeAreaView>
+
+      <ErrorModal visible={isError} onClose={reset} />
     </View>
   )
 }

@@ -3,15 +3,14 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 
-import { ApiError } from '@/core/api/api-error'
 import { AuthTextField } from '@/features/auth/components/AuthTextField'
 import { DateField } from '@/features/auth/components/DateField'
 import { DropdownField } from '@/features/auth/components/DropdownField'
-import { FormError } from '@/features/auth/components/FormError'
 import { PillSelect } from '@/features/auth/components/PillSelect'
 import { useRegister } from '@/features/auth/hooks/useRegister'
 import { genderOptions, maritalStatusOptions, registerSchema, type RegisterFormValues } from '@/features/auth/schemas/register.schema'
 import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
+import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
 import { toISODateString } from '@/shared/utils/date'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
@@ -52,7 +51,7 @@ interface RegisterFormProps {
 
 export function RegisterForm({ onRegistered }: RegisterFormProps) {
   const { mutate, isPending } = useRegister()
-  const [submitError, setSubmitError] = useState<ApiError | Error | null>(null)
+  const [submitError, setSubmitError] = useState(false)
   const [step, setStep] = useState<1 | 2>(1)
 
   const { control, handleSubmit, trigger } = useForm<RegisterFormValues>({
@@ -76,7 +75,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
   }
 
   const onSubmit = (values: RegisterFormValues) => {
-    setSubmitError(null)
+    setSubmitError(false)
     const { confirmPassword: _confirmPassword, ...rest } = values
     const payload = {
       ...rest,
@@ -84,7 +83,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
       contactNo: values.contactNo || undefined,
       address: values.address || undefined,
     }
-    mutate(payload, { onError: (err) => setSubmitError(err), onSuccess: onRegistered })
+    mutate(payload, { onError: () => setSubmitError(true), onSuccess: onRegistered })
   }
 
   return (
@@ -241,13 +240,6 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
             )}
           />
 
-          {submitError ? (
-            <FormError
-              message={submitError.message}
-              issues={submitError instanceof ApiError ? submitError.issues : undefined}
-            />
-          ) : null}
-
           <OnboardingButton
             label="Create account"
             variant="filled"
@@ -265,6 +257,8 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
           />
         </View>
       )}
+
+      <ErrorModal visible={submitError} onClose={() => setSubmitError(false)} />
     </View>
   )
 }

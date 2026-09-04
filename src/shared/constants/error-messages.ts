@@ -1,7 +1,7 @@
 export const ERROR_MESSAGES = {
-  NETWORK: "Can't reach the server. Check your internet connection and try again.",
-  TIMEOUT: 'The request timed out. Check your connection and try again.',
-  SESSION_EXPIRED: 'Session expired',
-  NO_REFRESH_TOKEN: 'No refresh token available',
-  GENERIC: 'Something went wrong',
+  NETWORK: 'Something went wrong. Please try again.',
+  TIMEOUT: 'Something went wrong. Please try again.',
+  SESSION_EXPIRED: 'Something went wrong. Please try again.',
+  NO_REFRESH_TOKEN: 'Something went wrong. Please try again.',
+  GENERIC: 'Something went wrong. Please try again.',
 } as const

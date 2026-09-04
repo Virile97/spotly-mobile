@@ -31,7 +31,6 @@ function StripeAvatar({ emoji, size, rounded }: { emoji?: string; size: number; 
 }
 
 export function MessagesScreen() {
-  const router = useRouter()
   const insets = useSafeAreaInsets()
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<FilterId>('All')
@@ -51,17 +50,7 @@ export function MessagesScreen() {
   return (
     <View style={[styles.root, { paddingTop: insets.top + spacing.sm }]}>
       <View style={styles.header}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Go back"
-          style={styles.iconButton}
-          onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={22} color={palette.white} />
-        </Pressable>
         <Text style={styles.title}>Messages</Text>
-        <Pressable accessibilityRole="button" accessibilityLabel="New message" style={styles.iconButton}>
-          <Ionicons name="add" size={22} color={palette.white} />
-        </Pressable>
       </View>
 
       <View style={styles.searchField}>
@@ -174,18 +163,9 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
+    justifyContent: 'center',
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.md,
-  },
-  iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.85)',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   title: {
     flex: 1,
@@ -193,6 +173,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 34,
     fontFamily: fontFamily.headline,
+    textAlign: 'center',
   },
   searchField: {
     marginHorizontal: spacing.md,

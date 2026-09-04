@@ -11,6 +11,7 @@ export interface MessageThread {
   avatarUrl?: string | null
   emoji?: string
   placeId?: string
+  userId?: string
 }
 
 export interface ChatMessage {
@@ -18,6 +19,9 @@ export interface ChatMessage {
   fromMe: boolean
   text: string
   seenLabel?: string
+  replyToText?: string
+  mediaUrl?: string
+  reactionEmoji?: string
 }
 
 export const mockThreads: MessageThread[] = [
@@ -29,6 +33,7 @@ export const mockThreads: MessageThread[] = [
     unreadCount: 2,
     kind: 'direct',
     online: true,
+    userId: 'user-maria',
   },
   {
     id: 'thread-coffee-house',
@@ -47,6 +52,7 @@ export const mockThreads: MessageThread[] = [
     timeLabel: 'Yesterday',
     unreadCount: 0,
     kind: 'direct',
+    userId: 'user-john',
   },
   {
     id: 'thread-kenji',
@@ -55,6 +61,7 @@ export const mockThreads: MessageThread[] = [
     timeLabel: 'Mon',
     unreadCount: 0,
     kind: 'direct',
+    userId: 'user-kenji',
   },
   {
     id: 'thread-weekend',
@@ -72,6 +79,7 @@ export const mockThreads: MessageThread[] = [
     timeLabel: 'Sat',
     unreadCount: 0,
     kind: 'direct',
+    userId: 'user-aliyah',
   },
 ]
 
@@ -85,6 +93,12 @@ const mockMessages: Record<string, ChatMessage[]> = {
       fromMe: true,
       text: 'Yeah, thinking Saturday morning before it gets crowded',
       seenLabel: 'Seen 2:16 PM',
+    },
+    {
+      id: 'm5',
+      fromMe: false,
+      text: "Perfect, I'll meet you there at 9!",
+      replyToText: 'Yeah, thinking Saturday morning before it gets crowded',
     },
   ],
   'thread-coffee-house': [
