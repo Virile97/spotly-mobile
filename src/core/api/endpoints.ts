@@ -11,7 +11,9 @@ export const endpoints = {
     me: '/profiles/me',
     imageUploadUrl: '/profiles/me/image-upload-url',
     image: '/profiles/me/image',
+    interests: '/profiles/me/interests',
     byUsername: (username: string) => `/profiles/${encodeURIComponent(username)}`,
     share: (username: string) => `/profiles/${encodeURIComponent(username)}/share`,
   },
+  interests: '/interests',
 } as const

@@ -3,6 +3,14 @@ import type { MaritalStatus } from '@/features/auth/types/auth.types'
 export type ProfileImageType = 'avatar' | 'background'
 export type ProfileImageContentType = 'image/jpeg' | 'image/png' | 'image/webp'
 
+export interface Interest {
+  id: string
+  icon: string
+  name: string
+}
+
+export type ProfileInterest = Interest
+
 export interface Profile {
   id: string
   username: string | null
@@ -13,6 +21,7 @@ export interface Profile {
   bio: string | null
   avatarUrl: string | null
   backgroundImageUrl: string | null
+  interests?: ProfileInterest[]
   followersCount: number
   followingCount: number
   postsCount: number
@@ -53,6 +62,14 @@ export interface ConfirmProfileImagePayload {
 
 export interface ProfileShareResponse {
   url: string
+}
+
+export interface UpdateInterestsPayload {
+  interestIds: string[]
+}
+
+export interface InterestsResponse {
+  interests: Interest[]
 }
 
 export interface ProfileStats {

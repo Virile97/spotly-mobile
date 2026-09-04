@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Platform,
   Pressable,
+  RefreshControl,
   ScrollView,
   Share,
   StyleSheet,
@@ -19,6 +20,8 @@ import { useAuthStore } from '@/features/auth/store/auth.store'
 import { mockPosts } from '@/features/feed/data/mock-posts'
 import { mockPlaces } from '@/features/places/data/mock-places'
 import { profileApi } from '@/features/profile/api/profile.api'
+import { InterestChip } from '@/features/profile/components/InterestChip'
+import { getMockProfile } from '@/features/profile/data/mock-profile'
 import { useDisplayedProfileImages } from '@/features/profile/hooks/useDisplayedProfileImages'
 import { useProfile } from '@/features/profile/hooks/useProfile'
 import { useUploadProfileImage } from '@/features/profile/hooks/useUploadProfileImage'
@@ -29,6 +32,7 @@ import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
 import { ErrorState } from '@/shared/components/feedback/ErrorState'
 import { LoadingState } from '@/shared/components/feedback/LoadingState'
 import { getTabBarOverlayHeight } from '@/shared/constants/tab-bar'
+import { LIMITS } from '@/shared/constants/limits'
 import { getErrorMessage } from '@/shared/utils/error'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
@@ -72,6 +76,7 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
   const [tab, setTab] = useState<ProfileTab>('Posts')
   const [isFollowing, setIsFollowing] = useState(false)
   const [actionError, setActionError] = useState<string | null>(null)
+  const [refreshing, setRefreshing] = useState(false)
 
   const isOwn = !userId || profile?.id === currentUser?.id || profile?.username === userId
   const displayName = profile ? profileDisplayName(profile) : ''
@@ -143,6 +148,14 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
   const handleLabel = profile.username ? `@${profile.username}` : isOwn ? 'Set a username' : null
   const avatarUrl = isOwn ? displayed.avatarUrl : profile.avatarUrl
   const backgroundUrl = isOwn ? displayed.backgroundImageUrl : profile.backgroundImageUrl
+  const interests =
+    profile.interests && profile.interests.length > 0
+      ? profile.interests
+      : !isOwn && userId
+        ? (getMockProfile(userId)?.interests ?? [])
+        : []
+  const canEditInterests = isOwn
+  const openInterests = () => router.push('/settings/interests' as Href)
   const isUploadingBackground = backgroundUpload.isPending
   const Cover = isOwn ? Pressable : View
 
@@ -150,7 +163,19 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
     <View style={styles.root}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: bottomPad }}>
+        contentContainerStyle={{ paddingBottom: bottomPad }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true)
+              void refetch().finally(() => setRefreshing(false))
+            }}
+            tintColor={palette.white}
+            colors={[palette.pink500]}
+            progressBackgroundColor="#17161A"
+          />
+        }>
         <Cover
           accessibilityRole={isOwn ? 'button' : undefined}
           accessibilityLabel={isOwn ? 'Change background photo' : undefined}
@@ -245,6 +270,22 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
           </View>
 
           {profile.bio ? <Text style={styles.bio}>{profile.bio}</Text> : null}
+
+          {interests.length > 0 || isOwn ? (
+            <View style={styles.interests}>
+              {interests.map((interest) => (
+                <InterestChip
+                  key={interest.id}
+                  icon={interest.icon}
+                  name={interest.name}
+                  onPress={canEditInterests ? openInterests : undefined}
+                />
+              ))}
+              {isOwn && interests.length < LIMITS.MAX_PROFILE_INTERESTS ? (
+                <InterestChip plus name={interests.length === 0 ? 'interests' : undefined} onPress={openInterests} />
+              ) : null}
+            </View>
+          ) : null}
 
           <View style={styles.stats}>
             {(
@@ -424,9 +465,10 @@ const styles = StyleSheet.create({
   handle: {
     marginTop: 2,
     color: 'rgba(255,255,255,0.45)',
-    fontSize: fontSize.sm,
-    lineHeight: 18,
+    fontSize: fontSize.xs,
+    lineHeight: 16,
     fontFamily: fontFamily.body,
+    includeFontPadding: false,
   },
   bio: {
     marginTop: spacing.md,
@@ -434,6 +476,12 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sm,
     fontFamily: fontFamily.body,
     lineHeight: 20,
+  },
+  interests: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.md,
   },
   stats: {
     flexDirection: 'row',

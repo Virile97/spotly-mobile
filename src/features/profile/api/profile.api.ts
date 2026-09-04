@@ -10,19 +10,23 @@ import type {
   ConfirmProfileImagePayload,
   ImageUploadUrlRequest,
   ImageUploadUrlResponse,
+  Interest,
   Profile,
   ProfileImageContentType,
   ProfileImageType,
   ProfileResponse,
   ProfileShareResponse,
+  UpdateInterestsPayload,
   UpdateProfilePayload,
 } from '@/features/profile/types/profile.types'
+import { normalizeInterestList } from '@/features/profile/utils/interests'
 
 function withPublicMediaUrls(profile: Profile): Profile {
   return {
     ...profile,
     avatarUrl: toPublicMediaUrl(profile.avatarUrl),
     backgroundImageUrl: toPublicMediaUrl(profile.backgroundImageUrl),
+    interests: profile.interests ? normalizeInterestList(profile.interests) : profile.interests,
   }
 }
 
@@ -113,6 +117,22 @@ export const profileApi = {
 
   getShareUrl: (username: string) =>
     apiClient.get<ProfileShareResponse>(endpoints.profiles.share(username)).then((res) => res.data),
+
+  listInterests: () =>
+    apiClient
+      .get<Interest[] | { interests: Interest[] }>(endpoints.interests)
+      .then((res) => normalizeInterestList(Array.isArray(res.data) ? res.data : res.data.interests)),
+
+  updateMyInterests: (payload: UpdateInterestsPayload) =>
+    apiClient
+      .put<{ interests?: Interest[]; profile?: Profile }>(endpoints.profiles.interests, payload)
+      .then((res) => {
+        if (res.data.profile) {
+          const profile = withPublicMediaUrls(res.data.profile)
+          return { profile, interests: profile.interests ?? [] }
+        }
+        return { interests: normalizeInterestList(res.data.interests) }
+      }),
 
   async uploadProfileImage(
     type: ProfileImageType,

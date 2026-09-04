@@ -6,5 +6,6 @@ export const queryKeys = {
   nearbyPlaces: (params?: object) => ['places', 'nearby', params] as const,
   profileMe: () => ['profile', 'me'] as const,
   profileUsername: (username: string) => ['profile', 'username', username] as const,
+  interests: () => ['interests'] as const,
   notifications: () => ['notifications'] as const,
 }

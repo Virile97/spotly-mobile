@@ -4,13 +4,15 @@ import { toPublicMediaUrl } from '@/config/public-media-url'
 import { queryKeys } from '@/core/query/query-keys'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import type { Profile } from '@/features/profile/types/profile.types'
+import { normalizeInterestList } from '@/features/profile/utils/interests'
 import { applyProfileToAuthUser } from '@/features/profile/utils/profile'
 
 export function cacheProfile(queryClient: QueryClient, profile: Profile) {
-  const next = {
+  const next: Profile = {
     ...profile,
     avatarUrl: toPublicMediaUrl(profile.avatarUrl),
     backgroundImageUrl: toPublicMediaUrl(profile.backgroundImageUrl),
+    interests: normalizeInterestList(profile.interests),
   }
 
   queryClient.setQueryData(queryKeys.profileMe(), next)

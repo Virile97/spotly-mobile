@@ -1,9 +1,25 @@
 import type { Socket } from "socket.io-client"
 
-import type { Profile } from "@/features/profile/types/profile.types"
+import type { Interest, Profile } from "@/features/profile/types/profile.types"
 import { SOCKET_EVENTS } from "./socket-events"
 
-export type ProfileUpdatedPayload = Profile
+export interface ProfileUpdatedPayload {
+  id: string
+  username: string | null
+  displayName: string | null
+  firstName: string
+  middleName: string | null
+  lastName: string
+  bio: string | null
+  avatarUrl: string | null
+  backgroundImageUrl: string | null
+  followersCount: number
+  followingCount: number
+  postsCount: number
+  isActive: boolean
+  createdAt: string
+  interests: Interest[]
+}
 
 export interface ServerToClientEvents {
   [SOCKET_EVENTS.PROFILE_UPDATED]: (profile: ProfileUpdatedPayload) => void

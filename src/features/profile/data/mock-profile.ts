@@ -1,6 +1,6 @@
 import { Asset } from 'expo-asset'
 
-import type { ProfileStats } from '@/features/profile/types/profile.types'
+import type { ProfileInterest, ProfileStats } from '@/features/profile/types/profile.types'
 
 function assetUri(module: number): string {
   return Asset.fromModule(module).uri
@@ -11,11 +11,6 @@ const coverJoshua = assetUri(require('../../../../assets/images/profile/cover.jp
 const coverCafe = assetUri(require('../../../../assets/images/onboarding/slide-discover.png'))
 const coverShare = assetUri(require('../../../../assets/images/onboarding/slide-share.png'))
 const coverDestination = assetUri(require('../../../../assets/images/onboarding/slide-destination.png'))
-
-export interface ProfileInterest {
-  emoji: string
-  label: string
-}
 
 export interface ProfileView {
   id: string
@@ -40,9 +35,9 @@ export const mockOwnProfile: ProfileView = {
   avatarUrl: avatarJoshua,
   coverImageUrl: coverJoshua,
   interests: [
-    { emoji: '☕', label: 'Coffee' },
-    { emoji: '📸', label: 'Photography' },
-    { emoji: '🏖️', label: 'Travel' },
+    { id: 'coffee', icon: '☕', name: 'Coffee' },
+    { id: 'photography', icon: '📸', name: 'Photography' },
+    { id: 'travel', icon: '🏖️', name: 'Travel' },
   ],
   stats: {
     postCount: 86,
@@ -63,9 +58,9 @@ export const mockProfiles: ProfileView[] = [
     avatarUrl: coverCafe,
     coverImageUrl: coverDestination,
     interests: [
-      { emoji: '🌄', label: 'Sunrise' },
-      { emoji: '📸', label: 'Photography' },
-      { emoji: '🏖️', label: 'Travel' },
+      { id: 'sunrise', icon: '🌄', name: 'Sunrise' },
+      { id: 'photography', icon: '📸', name: 'Photography' },
+      { id: 'travel', icon: '🏖️', name: 'Travel' },
     ],
     stats: { postCount: 142, followerCount: 890, followingCount: 210 },
   },
@@ -79,8 +74,8 @@ export const mockProfiles: ProfileView[] = [
     avatarUrl: coverShare,
     coverImageUrl: coverCafe,
     interests: [
-      { emoji: '🍜', label: 'Food' },
-      { emoji: '☕', label: 'Coffee' },
+      { id: 'food', icon: '🍜', name: 'Food' },
+      { id: 'coffee', icon: '☕', name: 'Coffee' },
     ],
     stats: { postCount: 86, followerCount: 420, followingCount: 180 },
   },
@@ -94,8 +89,8 @@ export const mockProfiles: ProfileView[] = [
     avatarUrl: coverCafe,
     coverImageUrl: coverShare,
     interests: [
-      { emoji: '🍜', label: 'Ramen' },
-      { emoji: '☕', label: 'Coffee' },
+      { id: 'ramen', icon: '🍜', name: 'Ramen' },
+      { id: 'coffee', icon: '☕', name: 'Coffee' },
     ],
     stats: { postCount: 64, followerCount: 310, followingCount: 95 },
   },
@@ -109,8 +104,8 @@ export const mockProfiles: ProfileView[] = [
     avatarUrl: coverShare,
     coverImageUrl: coverCafe,
     interests: [
-      { emoji: '☕', label: 'Coffee' },
-      { emoji: '📚', label: 'Work' },
+      { id: 'coffee', icon: '☕', name: 'Coffee' },
+      { id: 'work', icon: '📚', name: 'Work' },
     ],
     stats: { postCount: 58, followerCount: 240, followingCount: 120 },
   },
@@ -124,8 +119,8 @@ export const mockProfiles: ProfileView[] = [
     avatarUrl: coverDestination,
     coverImageUrl: coverDestination,
     interests: [
-      { emoji: '💧', label: 'Hikes' },
-      { emoji: '📸', label: 'Photography' },
+      { id: 'hikes', icon: '💧', name: 'Hikes' },
+      { id: 'photography', icon: '📸', name: 'Photography' },
     ],
     stats: { postCount: 31, followerCount: 156, followingCount: 88 },
   },
