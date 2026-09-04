@@ -9,7 +9,7 @@ import { MomentCard } from './MomentCard'
 export function MomentsRow() {
   return (
     <View style={styles.section}>
-      <Text style={styles.title}>Moments near you</Text>
+      <Text style={styles.title}>Moments</Text>
 
       <ScrollView
         horizontal

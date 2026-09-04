@@ -14,9 +14,17 @@ interface PostCaptionProps {
   placeName?: string | null
   onMentionPress?: (username: string) => void
   onHashtagPress?: (tag: string) => void
+  /** When false, the full caption is always shown. */
+  truncate?: boolean
 }
 
-export function PostCaption({ caption, placeName, onMentionPress, onHashtagPress }: PostCaptionProps) {
+export function PostCaption({
+  caption,
+  placeName,
+  onMentionPress,
+  onHashtagPress,
+  truncate = true,
+}: PostCaptionProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   // Keyed by caption so a changed caption invalidates the measurement instead
   // of keeping a stale line count.
@@ -25,7 +33,7 @@ export function PostCaption({ caption, placeName, onMentionPress, onHashtagPress
   const segments = useMemo(() => parseCaption(caption), [caption])
 
   const lineCount = measured?.caption === caption ? measured.lines : null
-  const isTruncatable = lineCount !== null && lineCount > COLLAPSED_LINE_LIMIT
+  const isTruncatable = truncate && lineCount !== null && lineCount > COLLAPSED_LINE_LIMIT
 
   const onMeasureTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
     setMeasured({ caption, lines: event.nativeEvent.lines.length })
@@ -61,11 +69,11 @@ export function PostCaption({ caption, placeName, onMentionPress, onHashtagPress
 
   return (
     <View>
-      <Text style={styles.caption} numberOfLines={isExpanded ? undefined : COLLAPSED_LINE_LIMIT}>
+      <Text style={styles.caption} numberOfLines={truncate && !isExpanded ? COLLAPSED_LINE_LIMIT : undefined}>
         {content}
       </Text>
 
-      {lineCount === null ? (
+      {truncate && lineCount === null ? (
         // Unclamped off-screen copy, measured once: onTextLayout on the visible
         // Text only reports the lines that survived numberOfLines.
         <Text

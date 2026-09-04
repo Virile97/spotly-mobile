@@ -1,6 +1,15 @@
 import { Image } from 'expo-image'
-import { useState } from 'react'
-import { Dimensions, FlatList, StyleSheet, Text, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native'
+import { useRef, useState } from 'react'
+import {
+  Dimensions,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+} from 'react-native'
 
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
@@ -8,10 +17,19 @@ import { radius, spacing } from '@/theme/spacing'
 import { fontSize } from '@/theme/typography'
 
 const { width } = Dimensions.get('window')
-const MEDIA_HEIGHT = width
 
-export function PostMedia({ uris }: { uris: string[] }) {
+export function PostMedia({
+  uris,
+  aspectRatio = 1,
+  onPress,
+}: {
+  uris: string[]
+  aspectRatio?: number
+  onPress?: (index: number) => void
+}) {
   const [activeIndex, setActiveIndex] = useState(0)
+  const isDragging = useRef(false)
+  const mediaHeight = width / aspectRatio
 
   if (uris.length === 0) return null
 
@@ -21,15 +39,42 @@ export function PostMedia({ uris }: { uris: string[] }) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { height: mediaHeight }]}>
       <FlatList
         data={uris}
         keyExtractor={(uri, index) => `${uri}-${index}`}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
+        onScrollBeginDrag={() => {
+          isDragging.current = true
+        }}
+        onScrollEndDrag={() => {
+          setTimeout(() => {
+            isDragging.current = false
+          }, 0)
+        }}
         onMomentumScrollEnd={onMomentumScrollEnd}
-        renderItem={({ item }) => <Image source={{ uri: item }} style={styles.media} contentFit="cover" />}
+        renderItem={({ item, index }) => {
+          const image = (
+            <Image source={{ uri: item }} style={[styles.media, { height: mediaHeight }]} contentFit="cover" />
+          )
+
+          if (!onPress) return image
+
+          return (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="View full size media"
+              style={styles.media}
+              onPress={() => {
+                if (isDragging.current) return
+                onPress(index)
+              }}>
+              {image}
+            </Pressable>
+          )
+        }}
       />
 
       {uris.length > 1 ? (
@@ -57,11 +102,9 @@ export function PostMedia({ uris }: { uris: string[] }) {
 const styles = StyleSheet.create({
   container: {
     width,
-    height: MEDIA_HEIGHT,
   },
   media: {
     width,
-    height: MEDIA_HEIGHT,
   },
   counter: {
     position: 'absolute',

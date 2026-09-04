@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { CommentsSheet } from '@/features/comments/components/CommentsSheet'
 import { useCommentThreads } from '@/features/comments/hooks/useCommentThreads'
@@ -15,7 +15,7 @@ import { PostCaption } from './PostCaption'
 import { PostHeader } from './PostHeader'
 import { PostMedia } from './PostMedia'
 
-export function PostCard({ post }: { post: Post }) {
+export function PostCard({ post, onPress }: { post: Post; onPress?: () => void }) {
   const router = useRouter()
   const [isCommentsOpen, setIsCommentsOpen] = useState(false)
   const { threads, commentCount, addComment } = useCommentThreads(post.id, post.commentCount)
@@ -23,29 +23,37 @@ export function PostCard({ post }: { post: Post }) {
 
   return (
     <View style={styles.container}>
-      <PostHeader post={post} />
+      <Pressable
+        accessibilityRole={onPress ? 'button' : undefined}
+        accessibilityLabel={onPress ? `Open post by ${post.author.username}` : undefined}
+        disabled={!onPress}
+        onPress={onPress}>
+        <PostHeader post={post} />
+      </Pressable>
 
-      <PostMedia uris={post.mediaUrls} />
+      <PostMedia uris={post.mediaUrls} onPress={onPress ? () => onPress() : undefined} />
 
-      <View style={styles.body}>
-        {post.caption ? (
-          <PostCaption
-            caption={post.caption}
-            placeName={post.placeName}
-            onMentionPress={(username) => router.push(`/users/${username}`)}
-          />
-        ) : null}
+      <Pressable disabled={!onPress} onPress={onPress}>
+        <View style={styles.body}>
+          {post.caption ? (
+            <PostCaption
+              caption={post.caption}
+              placeName={post.placeName}
+              onMentionPress={(username) => router.push(`/users/${username}`)}
+            />
+          ) : null}
 
-        {post.isOpen !== null ? (
-          <View style={styles.statusRow}>
-            <View style={[styles.statusDot, post.isOpen ? styles.statusDotOpen : styles.statusDotClosed]} />
-            <Text style={styles.statusText}>{post.isOpen ? 'Open' : 'Closed'}</Text>
-            {post.distanceKm !== null ? (
-              <Text style={styles.statusText}> · {post.distanceKm} km away</Text>
-            ) : null}
-          </View>
-        ) : null}
-      </View>
+          {post.isOpen !== null ? (
+            <View style={styles.statusRow}>
+              <View style={[styles.statusDot, post.isOpen ? styles.statusDotOpen : styles.statusDotClosed]} />
+              <Text style={styles.statusText}>{post.isOpen ? 'Open' : 'Closed'}</Text>
+              {post.distanceKm !== null ? (
+                <Text style={styles.statusText}> · {post.distanceKm} km away</Text>
+              ) : null}
+            </View>
+          ) : null}
+        </View>
+      </Pressable>
 
       <PostActions
         reactionCount={reactionCount}

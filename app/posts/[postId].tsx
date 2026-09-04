@@ -1,24 +1,34 @@
 import { useLocalSearchParams } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
+import { StyleSheet, View } from 'react-native'
 
-import { PostCard } from '@/features/posts/components/PostCard'
-import { usePost } from '@/features/posts/hooks/usePost'
-import { Screen } from '@/shared/components/layout/Screen'
-import { LoadingState } from '@/shared/components/feedback/LoadingState'
+import { PostDetail } from '@/features/posts/components/PostDetail'
+import { useResolvedPost } from '@/features/posts/hooks/useResolvedPost'
 import { ErrorState } from '@/shared/components/feedback/ErrorState'
+import { LoadingState } from '@/shared/components/feedback/LoadingState'
 
 export default function PostDetailScreen() {
   const { postId } = useLocalSearchParams<{ postId: string }>()
-  const { data, isLoading, isError, refetch } = usePost(postId)
+  const { post, isLoading, isError, refetch } = useResolvedPost(postId)
 
   return (
-    <Screen scroll>
+    <View style={styles.root}>
+      <StatusBar style="light" />
+
       {isLoading ? (
         <LoadingState />
-      ) : isError || !data ? (
-        <ErrorState onRetry={() => refetch()} />
+      ) : isError || !post ? (
+        <ErrorState onRetry={refetch} />
       ) : (
-        <PostCard post={data} />
+        <PostDetail post={post} />
       )}
-    </Screen>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#0A090B',
+  },
+})
