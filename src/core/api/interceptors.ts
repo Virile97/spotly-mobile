@@ -75,6 +75,10 @@ function getOrCreateRefreshPromise(): Promise<string> {
   return refreshPromise
 }
 
+export function refreshSession(): Promise<string> {
+  return getOrCreateRefreshPromise()
+}
+
 export function attachInterceptors(client: AxiosInstance): void {
   client.interceptors.request.use(async (config) => {
     config.headers.set('x-spotly-api-key', env.spotlyApiKey)

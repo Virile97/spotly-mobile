@@ -13,8 +13,7 @@ import { cacheProfile } from '@/features/profile/hooks/cache-profile'
 import { useDisplayedProfileImages } from '@/features/profile/hooks/useDisplayedProfileImages'
 import { useMyProfile } from '@/features/profile/hooks/useProfile'
 import { useProfileImagePreviewStore } from '@/features/profile/store/profile-image-preview.store'
-import type { ProfileImageContentType } from '@/features/profile/types/profile.types'
-import { pickProfileImageFromSource } from '@/features/profile/utils/pick-profile-image'
+import { pickProfileImage, pickProfileImageFromSource } from '@/features/profile/utils/pick-profile-image'
 import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
 import { ErrorState } from '@/shared/components/feedback/ErrorState'
 import { LoadingState } from '@/shared/components/feedback/LoadingState'
@@ -24,11 +23,6 @@ import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { radius, spacing } from '@/theme/spacing'
 import { fontSize } from '@/theme/typography'
-
-interface PendingAvatar {
-  uri: string
-  contentType: ProfileImageContentType
-}
 
 function StripeFill() {
   return (
@@ -46,9 +40,9 @@ export function UpdateAvatarScreen() {
   const queryClient = useQueryClient()
   const { data: profile, isLoading, isError, error, refetch } = useMyProfile()
   const setImagePreview = useProfileImagePreviewStore((state) => state.setImage)
+  const pending = useProfileImagePreviewStore((state) => state.pendingAvatar)
+  const setPendingAvatar = useProfileImagePreviewStore((state) => state.setPendingAvatar)
   const { avatarUrl: displayedAvatarUrl } = useDisplayedProfileImages(profile)
-  const [step, setStep] = useState<'view' | 'confirm'>('view')
-  const [pending, setPending] = useState<PendingAvatar | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [shareToPublic, setShareToPublic] = useState(false)
@@ -59,7 +53,7 @@ export function UpdateAvatarScreen() {
   const [caption, setCaption] = useState('')
 
   const previewUri = pending?.uri ?? displayedAvatarUrl
-  const isConfirm = step === 'confirm' && pending != null
+  const isConfirm = pending != null
   const ownId = profile?.id ?? mockOwnProfile.id
 
   const taggedPeople = useMemo(
@@ -96,8 +90,18 @@ export function UpdateAvatarScreen() {
   const onPick = async (source: 'camera' | 'library') => {
     const picked = await pickProfileImageFromSource('avatar', source)
     if (!picked) return
-    setPending(picked)
-    setStep('confirm')
+    setPendingAvatar(picked)
+  }
+
+  const onChangePhoto = async () => {
+    const picked = await pickProfileImage('avatar')
+    if (!picked) return
+    setPendingAvatar(picked)
+  }
+
+  const onLeave = () => {
+    setPendingAvatar(null)
+    router.back()
   }
 
   const onSave = async () => {
@@ -108,6 +112,7 @@ export function UpdateAvatarScreen() {
     try {
       const updated = await profileApi.uploadProfileImage('avatar', pending.uri, pending.contentType)
       setImagePreview('avatar', pending.uri)
+      setPendingAvatar(null)
       cacheProfile(queryClient, updated)
       router.back()
     } catch (err) {
@@ -128,7 +133,7 @@ export function UpdateAvatarScreen() {
           accessibilityLabel="Go back"
           hitSlop={8}
           style={styles.headerSide}
-          onPress={() => router.back()}>
+          onPress={onLeave}>
           <View style={styles.backButton}>
             <Ionicons name="chevron-back" size={22} color={palette.white} />
           </View>
@@ -255,7 +260,7 @@ export function UpdateAvatarScreen() {
             accessibilityLabel="Change photo"
             disabled={isSaving}
             style={styles.outlineButton}
-            onPress={() => setStep('view')}>
+            onPress={() => void onChangePhoto()}>
             <Text style={styles.outlineLabel}>Change photo</Text>
           </Pressable>
         </KeyboardAwareScrollView>

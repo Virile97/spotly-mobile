@@ -1,9 +1,16 @@
+import type { Socket } from 'socket.io-client'
+
+import type { Profile } from '@/features/profile/types/profile.types'
+import { SOCKET_EVENTS } from './socket-events'
+
+export type ProfileUpdatedPayload = Profile
+
 export interface ServerToClientEvents {
-  'comment:created': (payload: { postId: string; commentId: string }) => void
-  'notification:received': (payload: { id: string; type: string }) => void
+  [SOCKET_EVENTS.PROFILE_UPDATED]: (profile: ProfileUpdatedPayload) => void
 }
 
-export interface ClientToServerEvents {
-  'room:join': (room: string) => void
-  'room:leave': (room: string) => void
-}
+export type ClientToServerEvents = Record<string, never>
+
+export type RealtimeSocket = Socket<ServerToClientEvents, ClientToServerEvents>
+export type RealtimeEvent = keyof ServerToClientEvents
+export type RealtimeHandler<E extends RealtimeEvent> = ServerToClientEvents[E]

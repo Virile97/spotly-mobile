@@ -1,22 +1,27 @@
-import { io, type Socket } from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 import { env } from '@/config/env'
-import type { ClientToServerEvents, ServerToClientEvents } from './socket.types'
+import type { RealtimeSocket } from './socket.types'
 
-let socket: Socket<ServerToClientEvents, ClientToServerEvents> | null = null
+let socket: RealtimeSocket | null = null
 
-export function getSocket(token: string): Socket<ServerToClientEvents, ClientToServerEvents> {
-  if (!socket) {
-    socket = io(env.socketUrl, {
-      auth: { token },
-      autoConnect: false,
-      transports: ['websocket'],
-    })
-  }
+export function createSocket(token: string): RealtimeSocket {
+  destroySocket()
+  socket = io(env.socketUrl, {
+    auth: { token },
+    autoConnect: false,
+    reconnection: false,
+    transports: ['websocket'],
+  })
   return socket
 }
 
-export function disconnectSocket(): void {
+export function getSocket() {
+  return socket
+}
+
+export function destroySocket() {
+  socket?.removeAllListeners()
   socket?.disconnect()
   socket = null
 }
