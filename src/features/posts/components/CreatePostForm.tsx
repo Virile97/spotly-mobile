@@ -17,7 +17,9 @@ import { mockPlaces } from '@/features/places/data/mock-places'
 import type { Place } from '@/features/places/types/place.types'
 import { useCreatePost } from '@/features/posts/hooks/useCreatePost'
 import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
+import { ERROR_MESSAGES } from '@/shared/constants/error-messages'
 import { LIMITS } from '@/shared/constants/limits'
+import { getErrorMessage } from '@/shared/utils/error'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { radius, spacing } from '@/theme/spacing'
@@ -46,7 +48,7 @@ export function CreatePostForm({ onCancel, onSuccess }: CreatePostFormProps) {
   const [placeQuery, setPlaceQuery] = useState('')
   const [placeId, setPlaceId] = useState<string | null>(null)
   const [preciseLocation, setPreciseLocation] = useState(true)
-  const [submitError, setSubmitError] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const selected = media[activeIndex]
   const needle = placeQuery.trim().toLowerCase()
@@ -99,18 +101,18 @@ export function CreatePostForm({ onCancel, onSuccess }: CreatePostFormProps) {
 
   const onPost = () => {
     if (media.length === 0) {
-      setSubmitError(true)
+      setSubmitError(ERROR_MESSAGES.GENERIC)
       return
     }
 
-    setSubmitError(false)
+    setSubmitError(null)
     mutate(
       {
         caption: caption.trim(),
         mediaUrls: media.map((item) => item.uri),
         placeId: placeId ?? undefined,
       },
-      { onSuccess, onError: () => setSubmitError(true) }
+      { onSuccess, onError: (err) => setSubmitError(getErrorMessage(err)) }
     )
   }
 
@@ -241,7 +243,7 @@ export function CreatePostForm({ onCancel, onSuccess }: CreatePostFormProps) {
         </View>
       </View>
 
-      <ErrorModal visible={submitError} onClose={() => setSubmitError(false)} />
+      <ErrorModal visible={submitError != null} message={submitError ?? undefined} onClose={() => setSubmitError(null)} />
     </View>
   )
 }

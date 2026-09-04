@@ -6,6 +6,7 @@ interface UseResolvedPostResult {
   post: Post | null
   isLoading: boolean
   isError: boolean
+  error: unknown
   refetch: () => void
 }
 
@@ -18,13 +19,14 @@ export function useResolvedPost(postId: string): UseResolvedPostResult {
   const query = usePost(mock ? '' : postId)
 
   if (mock) {
-    return { post: mock, isLoading: false, isError: false, refetch: () => undefined }
+    return { post: mock, isLoading: false, isError: false, error: null, refetch: () => undefined }
   }
 
   return {
     post: query.data ?? null,
     isLoading: query.isLoading,
     isError: query.isError,
+    error: query.error,
     refetch: () => {
       void query.refetch()
     },

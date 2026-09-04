@@ -13,6 +13,7 @@ import { AuthTextField } from '@/features/auth/components/AuthTextField'
 import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
 import { KeyboardActionLayout } from '@/shared/components/layout/KeyboardActionLayout'
 import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
+import { getErrorMessage } from '@/shared/utils/error'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
@@ -32,7 +33,7 @@ export default function ForgotPasswordScreen() {
     defaultValues: { email: '' },
   })
 
-  const { mutate, isPending, isSuccess, isError, reset } = useMutation({
+  const { mutate, isPending, isSuccess, isError, error, reset } = useMutation({
     mutationFn: (values: ForgotPasswordFormValues) => authApi.requestPasswordReset(values.email),
   })
 
@@ -90,7 +91,7 @@ export default function ForgotPasswordScreen() {
         </KeyboardActionLayout>
       </SafeAreaView>
 
-      <ErrorModal visible={isError} onClose={reset} />
+      <ErrorModal visible={isError} message={getErrorMessage(error)} onClose={reset} />
     </View>
   )
 }

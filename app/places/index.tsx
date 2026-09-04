@@ -7,10 +7,11 @@ import { Screen } from '@/shared/components/layout/Screen'
 import { EmptyState } from '@/shared/components/feedback/EmptyState'
 import { ErrorState } from '@/shared/components/feedback/ErrorState'
 import { LoadingState } from '@/shared/components/feedback/LoadingState'
+import { getErrorMessage } from '@/shared/utils/error'
 
 export default function PlacesScreen() {
   const { location, error: locationError } = useUserLocation()
-  const { data, isLoading, isError, refetch } = useNearbyPlaces(location)
+  const { data, isLoading, isError, error, refetch } = useNearbyPlaces(location)
 
   if (locationError) return <ErrorState />
 
@@ -19,7 +20,7 @@ export default function PlacesScreen() {
       {isLoading ? (
         <LoadingState />
       ) : isError ? (
-        <ErrorState onRetry={() => refetch()} />
+        <ErrorState onRetry={() => refetch()} message={getErrorMessage(error)} />
       ) : (
         <FlatList
           data={data ?? []}

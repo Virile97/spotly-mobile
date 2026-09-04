@@ -13,6 +13,7 @@ import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/login
 import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
 import { KeyboardActionLayout } from '@/shared/components/layout/KeyboardActionLayout'
 import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
+import { getErrorMessage } from '@/shared/utils/error'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
@@ -21,7 +22,7 @@ import { fontSize } from '@/theme/typography'
 export default function LoginScreen() {
   const router = useRouter()
   const { mutate, isPending } = useLogin()
-  const [submitError, setSubmitError] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const { control, handleSubmit } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -29,8 +30,10 @@ export default function LoginScreen() {
   })
 
   const onSubmit = (values: LoginFormValues) => {
-    setSubmitError(false)
-    mutate(values, { onError: () => setSubmitError(true) })
+    setSubmitError(null)
+    mutate(values, {
+      onError: (err) => setSubmitError(getErrorMessage(err)),
+    })
   }
 
   return (
@@ -104,7 +107,7 @@ export default function LoginScreen() {
         </KeyboardActionLayout>
       </SafeAreaView>
 
-      <ErrorModal visible={submitError} onClose={() => setSubmitError(false)} />
+      <ErrorModal visible={submitError != null} message={submitError ?? undefined} onClose={() => setSubmitError(null)} />
     </View>
   )
 }

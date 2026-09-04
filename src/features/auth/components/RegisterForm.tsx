@@ -12,6 +12,7 @@ import { genderOptions, maritalStatusOptions, registerSchema, type RegisterFormV
 import { OnboardingButton } from '@/features/onboarding/components/OnboardingButton'
 import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
 import { toISODateString } from '@/shared/utils/date'
+import { getErrorMessage } from '@/shared/utils/error'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { spacing } from '@/theme/spacing'
@@ -51,7 +52,7 @@ interface RegisterFormProps {
 
 export function RegisterForm({ onRegistered }: RegisterFormProps) {
   const { mutate, isPending } = useRegister()
-  const [submitError, setSubmitError] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [step, setStep] = useState<1 | 2>(1)
 
   const { control, handleSubmit, trigger } = useForm<RegisterFormValues>({
@@ -75,7 +76,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
   }
 
   const onSubmit = (values: RegisterFormValues) => {
-    setSubmitError(false)
+    setSubmitError(null)
     const { confirmPassword: _confirmPassword, ...rest } = values
     const payload = {
       ...rest,
@@ -83,7 +84,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
       contactNo: values.contactNo || undefined,
       address: values.address || undefined,
     }
-    mutate(payload, { onError: () => setSubmitError(true), onSuccess: onRegistered })
+    mutate(payload, { onError: (err) => setSubmitError(getErrorMessage(err)), onSuccess: onRegistered })
   }
 
   return (
@@ -258,7 +259,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
         </View>
       )}
 
-      <ErrorModal visible={submitError} onClose={() => setSubmitError(false)} />
+      <ErrorModal visible={submitError != null} message={submitError ?? undefined} onClose={() => setSubmitError(null)} />
     </View>
   )
 }

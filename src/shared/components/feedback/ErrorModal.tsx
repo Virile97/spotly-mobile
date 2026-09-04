@@ -10,15 +10,23 @@ interface ErrorModalProps {
   visible: boolean
   onClose: () => void
   onRetry?: () => void
+  title?: string
+  message?: string
 }
 
-export function ErrorModal({ visible, onClose, onRetry }: ErrorModalProps) {
+export function ErrorModal({
+  visible,
+  onClose,
+  onRetry,
+  title = 'Something went wrong',
+  message = ERROR_MESSAGES.GENERIC,
+}: ErrorModalProps) {
   return (
     <Modal visible={visible} transparent animationType="fade" statusBarTranslucent onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose} accessibilityRole="button" accessibilityLabel="Dismiss">
         <Pressable style={styles.card} onPress={(event) => event.stopPropagation()}>
-          <Text style={styles.title}>Something went wrong</Text>
-          <Text style={styles.body}>{ERROR_MESSAGES.GENERIC}</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.body}>{message}</Text>
 
           <View style={styles.actions}>
             {onRetry ? (

@@ -5,9 +5,10 @@ import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
 
 interface ErrorStateProps {
   onRetry?: () => void
+  message?: string
 }
 
-export function ErrorState({ onRetry }: ErrorStateProps) {
+export function ErrorState({ onRetry, message }: ErrorStateProps) {
   const router = useRouter()
 
   const handleClose = () => {
@@ -16,7 +17,7 @@ export function ErrorState({ onRetry }: ErrorStateProps) {
 
   return (
     <View style={styles.container}>
-      <ErrorModal visible onClose={handleClose} onRetry={onRetry} />
+      <ErrorModal visible message={message} onClose={handleClose} onRetry={onRetry} />
     </View>
   )
 }

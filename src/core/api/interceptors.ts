@@ -124,10 +124,11 @@ export function attachInterceptors(client: AxiosInstance): void {
       }
 
       const body = error.response.data?.error
+      const message = body?.message?.trim() || ERROR_MESSAGES.GENERIC
       const code = body?.code
       const issues = body?.issues
 
-      return Promise.reject(new ApiError(ERROR_MESSAGES.GENERIC, status, code, issues))
+      return Promise.reject(new ApiError(message, status, code, issues))
     }
   )
 }
