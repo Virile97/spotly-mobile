@@ -81,6 +81,10 @@ export function FloatingTabBar({
             accessibilityLabel={
               options.tabBarAccessibilityLabel ?? options.title
             }
+            android_ripple={{
+              color: "rgba(255,255,255,0.16)",
+              foreground: true,
+            }}
             style={styles.item}
             onPress={onPress}
             onLongPress={() =>
@@ -130,15 +134,20 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(10,9,11,0.35)"
   },
   item: {
+    width: 52,
+    height: 40,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    borderRadius: 14,
+    overflow: "hidden"
   },
   iconSlot: {
     width: 52,
     height: 40,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 14
+    borderRadius: 14,
+    overflow: "hidden"
   },
   iconSlotActive: {
     backgroundColor: "rgba(255,255,255,0.12)"
