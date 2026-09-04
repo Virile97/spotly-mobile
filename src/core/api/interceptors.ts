@@ -28,12 +28,7 @@ interface RefreshResponseBody {
   }
 }
 
-const AUTH_PREFIX = '/auth'
 const NO_AUTH_HEADER_PATHS = [endpoints.auth.login, endpoints.auth.register, endpoints.auth.refresh]
-
-function isAuthRoute(url?: string): boolean {
-  return !!url && url.startsWith(AUTH_PREFIX)
-}
 
 function needsBearerToken(url?: string): boolean {
   return !NO_AUTH_HEADER_PATHS.some((path) => url?.startsWith(path))
@@ -82,9 +77,7 @@ function getOrCreateRefreshPromise(): Promise<string> {
 
 export function attachInterceptors(client: AxiosInstance): void {
   client.interceptors.request.use(async (config) => {
-    if (isAuthRoute(config.url)) {
-      config.headers.set('x-spotly-api-key', env.spotlyApiKey)
-    }
+    config.headers.set('x-spotly-api-key', env.spotlyApiKey)
 
     if (needsBearerToken(config.url)) {
       const token = await tokenStorage.getAccessToken()

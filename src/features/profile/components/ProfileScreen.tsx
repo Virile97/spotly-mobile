@@ -3,6 +3,7 @@ import { Image } from 'expo-image'
 import { useRouter, type Href } from 'expo-router'
 import { useMemo, useState } from 'react'
 import {
+  ActivityIndicator,
   Pressable,
   ScrollView,
   Share,
@@ -16,8 +17,18 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { mockPosts } from '@/features/feed/data/mock-posts'
 import { mockPlaces } from '@/features/places/data/mock-places'
-import { getMockProfile, mockOwnProfile } from '@/features/profile/data/mock-profile'
+import { profileApi } from '@/features/profile/api/profile.api'
+import { useDisplayedProfileImages } from '@/features/profile/hooks/useDisplayedProfileImages'
+import { useProfile } from '@/features/profile/hooks/useProfile'
+import { useUploadProfileImage } from '@/features/profile/hooks/useUploadProfileImage'
+import { useProfileImagePreviewStore } from '@/features/profile/store/profile-image-preview.store'
+import { pickProfileImageFromSource } from '@/features/profile/utils/pick-profile-image'
+import { profileDisplayName, profileStats } from '@/features/profile/utils/profile'
+import { ErrorModal } from '@/shared/components/feedback/ErrorModal'
+import { ErrorState } from '@/shared/components/feedback/ErrorState'
+import { LoadingState } from '@/shared/components/feedback/LoadingState'
 import { getTabBarOverlayHeight } from '@/shared/constants/tab-bar'
+import { getErrorMessage } from '@/shared/utils/error'
 import { palette } from '@/theme/colors'
 import { fontFamily } from '@/theme/fonts'
 import { radius, spacing } from '@/theme/spacing'
@@ -52,18 +63,23 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
   const insets = useSafeAreaInsets()
   const { width: windowWidth } = useWindowDimensions()
   const currentUser = useAuthStore((state) => state.user)
+  const { data: profile, isLoading, isError, error, refetch } = useProfile(userId)
+  const displayed = useDisplayedProfileImages(profile)
+  const backgroundUpload = useUploadProfileImage()
+  const setImagePreview = useProfileImagePreviewStore((state) => state.setImage)
+  const clearImagePreview = useProfileImagePreviewStore((state) => state.clearImage)
   const [tab, setTab] = useState<ProfileTab>('Posts')
   const [isFollowing, setIsFollowing] = useState(false)
+  const [actionError, setActionError] = useState<string | null>(null)
 
-  const profile = getMockProfile(userId) ?? mockOwnProfile
-  const isOwn = !userId || userId === currentUser?.id
-
-  const displayName = isOwn && currentUser?.displayName ? currentUser.displayName : profile.displayName
+  const isOwn = !userId || profile?.id === currentUser?.id || profile?.username === userId
+  const displayName = profile ? profileDisplayName(profile) : ''
+  const stats = profile ? profileStats(profile) : null
 
   const posts = useMemo(() => {
-    if (isOwn) return mockPosts
+    if (!profile) return []
     return mockPosts.filter((post) => post.author.id === profile.id || post.author.username === profile.username)
-  }, [isOwn, profile.id, profile.username])
+  }, [profile])
 
   const postTiles = useMemo(
     () =>
@@ -88,23 +104,74 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
   const bottomPad = getTabBarOverlayHeight(insets.bottom) + spacing.md
 
   const onShare = () => {
-    void Share.share({
-      message: `Check out ${displayName} on Spotly (@${profile.username})`,
-    }).catch(() => undefined)
+    if (!profile?.username) {
+      if (isOwn) router.push('/settings/account' as Href)
+      return
+    }
+
+    void profileApi
+      .getShareUrl(profile.username)
+      .then(({ url }) => Share.share({ url, message: url }))
+      .catch((err) => setActionError(getErrorMessage(err)))
   }
+
+  const onChangeBackground = async () => {
+    const picked = await pickProfileImageFromSource('background', 'library')
+    if (!picked) return
+
+    setImagePreview('background', picked.uri)
+    setActionError(null)
+
+    try {
+      await backgroundUpload.mutateAsync({
+        type: 'background',
+        fileUri: picked.uri,
+        contentType: picked.contentType,
+      })
+    } catch (err) {
+      clearImagePreview('background')
+      setActionError(getErrorMessage(err))
+    }
+  }
+
+  if (isLoading) return <LoadingState />
+  if (isError || !profile || !stats) {
+    return <ErrorState onRetry={() => refetch()} message={getErrorMessage(error)} />
+  }
+
+  const handleLabel = profile.username ? `@${profile.username}` : isOwn ? 'Set a username' : null
+  const avatarUrl = isOwn ? displayed.avatarUrl : profile.avatarUrl
+  const backgroundUrl = isOwn ? displayed.backgroundImageUrl : profile.backgroundImageUrl
+  const isUploadingBackground = backgroundUpload.isPending
+  const Cover = isOwn ? Pressable : View
 
   return (
     <View style={styles.root}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: bottomPad }}>
-        <View style={styles.cover}>
-          {profile.coverImageUrl ? (
-            <Image source={{ uri: profile.coverImageUrl }} style={StyleSheet.absoluteFill} contentFit="cover" />
+        <Cover
+          accessibilityRole={isOwn ? 'button' : undefined}
+          accessibilityLabel={isOwn ? 'Change background photo' : undefined}
+          disabled={isUploadingBackground}
+          onPress={isOwn ? () => void onChangeBackground() : undefined}
+          style={styles.cover}>
+          {backgroundUrl ? (
+            <Image
+              source={{ uri: backgroundUrl }}
+              style={StyleSheet.absoluteFill}
+              contentFit="cover"
+              recyclingKey={backgroundUrl}
+            />
           ) : (
             <StripeFill />
           )}
-          <View style={styles.coverScrim} />
+          <View style={styles.coverScrim} pointerEvents="none" />
+          {isUploadingBackground ? (
+            <View style={styles.coverOverlay} pointerEvents="none">
+              <ActivityIndicator color={palette.white} />
+            </View>
+          ) : null}
           {isOwn ? (
             <Pressable
               accessibilityRole="button"
@@ -124,43 +191,62 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
               <Ionicons name="chevron-back" size={20} color={palette.white} />
             </Pressable>
           )}
-        </View>
+        </Cover>
 
         <View style={styles.body}>
-          <View style={styles.avatar}>
-            {profile.avatarUrl ? (
-              <Image source={{ uri: profile.avatarUrl }} style={styles.avatarImage} contentFit="cover" />
-            ) : (
-              <StripeFill />
-            )}
-          </View>
+          {isOwn ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Update profile photo"
+              style={styles.avatar}
+              onPress={() => router.push('/settings/avatar' as Href)}>
+              {avatarUrl ? (
+                <Image
+                  source={{ uri: avatarUrl }}
+                  style={StyleSheet.absoluteFill}
+                  contentFit="cover"
+                  recyclingKey={avatarUrl}
+                />
+              ) : (
+                <StripeFill />
+              )}
+            </Pressable>
+          ) : (
+            <View style={styles.avatar}>
+              {avatarUrl ? (
+                <Image
+                  source={{ uri: avatarUrl }}
+                  style={StyleSheet.absoluteFill}
+                  contentFit="cover"
+                  recyclingKey={avatarUrl}
+                />
+              ) : (
+                <StripeFill />
+              )}
+            </View>
+          )}
 
           <Text style={styles.name}>{displayName}</Text>
-          <Text style={styles.handle}>
-            @{profile.username}
-            {profile.location ? ` · 📍 ${profile.location}` : ''}
-          </Text>
+          {handleLabel ? (
+            isOwn && !profile.username ? (
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => router.push('/settings/account' as Href)}>
+                <Text style={styles.handle}>{handleLabel}</Text>
+              </Pressable>
+            ) : (
+              <Text style={styles.handle}>{handleLabel}</Text>
+            )
+          ) : null}
 
           {profile.bio ? <Text style={styles.bio}>{profile.bio}</Text> : null}
-
-          {profile.interests.length > 0 ? (
-            <View style={styles.chips}>
-              {profile.interests.map((interest) => (
-                <View key={interest.label} style={styles.chip}>
-                  <Text style={styles.chipText}>
-                    {interest.emoji} {interest.label}
-                  </Text>
-                </View>
-              ))}
-            </View>
-          ) : null}
 
           <View style={styles.stats}>
             {(
               [
-                [profile.stats.postCount, 'Posts'],
-                [profile.stats.followerCount, 'Followers'],
-                [profile.stats.followingCount, 'Following'],
+                [stats.postCount, 'Posts'],
+                [stats.followerCount, 'Followers'],
+                [stats.followingCount, 'Following'],
               ] as const
             ).map(([value, label]) => (
               <View key={label} style={styles.stat}>
@@ -259,6 +345,8 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
 
         {isOwn && tab === 'Saved' ? <Text style={styles.empty}>No saved posts yet</Text> : null}
       </ScrollView>
+
+      <ErrorModal visible={actionError != null} message={actionError ?? undefined} onClose={() => setActionError(null)} />
     </View>
   )
 }
@@ -274,8 +362,14 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   coverScrim: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: 'rgba(0,0,0,0.25)',
+  },
+  coverOverlay: {
+    ...StyleSheet.absoluteFill,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.35)',
   },
   coverButton: {
     position: 'absolute',
@@ -305,10 +399,6 @@ const styles = StyleSheet.create({
     borderColor: '#0A090B',
     backgroundColor: '#1C1B1F',
   },
-  avatarImage: {
-    width: '100%',
-    height: '100%',
-  },
   name: {
     marginTop: spacing.sm,
     color: palette.white,
@@ -327,25 +417,6 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sm,
     fontFamily: fontFamily.body,
     lineHeight: 20,
-  },
-  chips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-    marginTop: spacing.sm,
-  },
-  chip: {
-    borderRadius: radius.full,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.14)',
-    backgroundColor: '#17161A',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  chipText: {
-    color: palette.white,
-    fontSize: fontSize.xs,
-    fontFamily: fontFamily.body,
   },
   stats: {
     flexDirection: 'row',
@@ -470,7 +541,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xl,
   },
   stripeFill: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: '#1C1B1F',
     overflow: 'hidden',
     alignItems: 'center',

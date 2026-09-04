@@ -52,13 +52,14 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: spacing.sm,
   },
   pill: {
-    flex: 1,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: spacing.sm,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.2)',

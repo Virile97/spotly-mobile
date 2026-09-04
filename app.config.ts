@@ -12,8 +12,14 @@ const config: ExpoConfig = {
   backgroundColor: '#0A090B',
   ios: {
     icon: './assets/expo.icon',
+    infoPlist: {
+      NSAppTransportSecurity: {
+        NSAllowsLocalNetworking: true,
+      },
+    },
   },
   android: {
+    usesCleartextTraffic: true,
     adaptiveIcon: {
       backgroundColor: '#E6F4FE',
       foregroundImage: './assets/images/android-icon-foreground.png',
@@ -61,6 +67,7 @@ const config: ExpoConfig = {
   },
   extra: {
     spotlyApiKey: process.env.SPOTLY_API_KEY,
+    mediaPublicBaseUrl: process.env.MEDIA_PUBLIC_BASE_URL,
   },
 }
 

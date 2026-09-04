@@ -4,6 +4,7 @@ export const queryKeys = {
   postComments: (postId: string) => ['post', postId, 'comments'] as const,
   place: (placeId: string) => ['place', placeId] as const,
   nearbyPlaces: (params?: object) => ['places', 'nearby', params] as const,
-  profile: (userId: string) => ['profile', userId] as const,
+  profileMe: () => ['profile', 'me'] as const,
+  profileUsername: (username: string) => ['profile', 'username', username] as const,
   notifications: () => ['notifications'] as const,
 }

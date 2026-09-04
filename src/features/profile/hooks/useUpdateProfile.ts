@@ -1,18 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { queryKeys } from '@/core/query/query-keys'
-import { profileApi, type UpdateProfilePayload } from '@/features/profile/api/profile.api'
-import { useAuthStore } from '@/features/auth/store/auth.store'
+import { profileApi } from '@/features/profile/api/profile.api'
+import type { UpdateProfilePayload } from '@/features/profile/types/profile.types'
+import { cacheProfile } from './cache-profile'
 
 export function useUpdateProfile() {
   const queryClient = useQueryClient()
-  const setUser = useAuthStore((state) => state.setUser)
 
   return useMutation({
-    mutationFn: (payload: UpdateProfilePayload) => profileApi.updateProfile(payload),
+    mutationFn: (payload: UpdateProfilePayload) => profileApi.updateMe(payload),
     onSuccess: (profile) => {
-      setUser(profile)
-      queryClient.invalidateQueries({ queryKey: queryKeys.profile(profile.id) })
+      cacheProfile(queryClient, profile)
     },
   })
 }

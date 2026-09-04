@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 
 import { useAppTheme } from '@/providers/ThemeProvider'
 import { formatCompactNumber } from '@/shared/utils/number'
-import type { ProfileStats as ProfileStatsType } from '@/features/profile/api/profile.api'
+import type { ProfileStats as ProfileStatsType } from '@/features/profile/types/profile.types'
 
 export function ProfileStats({ stats }: { stats: ProfileStatsType }) {
   const { theme } = useAppTheme()

@@ -3,6 +3,7 @@ export type MaritalStatus = 'SINGLE' | 'MARRIED'
 
 export interface AuthUser {
   id: string
+  username?: string | null
   firstName: string
   middleName: string | null
   lastName: string

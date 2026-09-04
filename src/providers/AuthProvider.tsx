@@ -5,6 +5,7 @@ import { authEvents } from '@/core/auth/auth-events'
 import { session } from '@/core/auth/session'
 import { authApi } from '@/features/auth/api/auth.api'
 import { useAuthStore } from '@/features/auth/store/auth.store'
+import { useProfileImagePreviewStore } from '@/features/profile/store/profile-image-preview.store'
 import { LoadingState } from '@/shared/components/feedback/LoadingState'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -12,6 +13,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const segments = useSegments()
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const clear = useAuthStore((state) => state.clear)
+  const clearImagePreview = useProfileImagePreviewStore((state) => state.clearAll)
   const setUser = useAuthStore((state) => state.setUser)
   const [isRestoring, setIsRestoring] = useState(true)
 
@@ -25,6 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(user)
       } catch {
         await session.end()
+        clearImagePreview()
         clear()
       }
     }
@@ -32,10 +35,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     restoreSession().finally(() => setIsRestoring(false))
 
     return authEvents.on('unauthorized', () => {
+      clearImagePreview()
       clear()
       router.replace('/(auth)/login')
     })
-  }, [clear, router, setUser])
+  }, [clear, clearImagePreview, router, setUser])
 
   // Guard route groups against the current auth state: signed-in users are
   // pushed out of (auth), signed-out users are pushed out of (tabs). This

@@ -1,6 +1,6 @@
 import { Asset } from 'expo-asset'
 
-import type { ProfileStats } from '@/features/profile/api/profile.api'
+import type { ProfileStats } from '@/features/profile/types/profile.types'
 
 function assetUri(module: number): string {
   return Asset.fromModule(module).uri

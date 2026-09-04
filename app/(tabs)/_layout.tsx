@@ -4,7 +4,8 @@ import { Tabs } from 'expo-router'
 import type { ComponentProps } from 'react'
 import { StyleSheet, View, type ColorValue } from 'react-native'
 
-import { mockOwnProfile } from '@/features/profile/data/mock-profile'
+import { useAuthStore } from '@/features/auth/store/auth.store'
+import { useDisplayedProfileImages } from '@/features/profile/hooks/useDisplayedProfileImages'
 import { ScrollCollapseProvider } from '@/providers/ScrollCollapseProvider'
 import { FloatingTabBar } from '@/shared/components/layout/FloatingTabBar'
 import { palette } from '@/theme/colors'
@@ -69,13 +70,22 @@ function TabIcon({ name, color, size = 22 }: { name: IoniconName; color: ColorVa
 }
 
 function ProfileTabIcon() {
+  const userAvatarUrl = useAuthStore((state) => state.user?.avatarUrl)
+  const { avatarUrl } = useDisplayedProfileImages({
+    avatarUrl: userAvatarUrl ?? null,
+    backgroundImageUrl: null,
+  })
+
   return (
     <View style={styles.avatarRing}>
-      <Image
-        source={{ uri: mockOwnProfile.avatarUrl ?? undefined }}
-        style={styles.avatar}
-        contentFit="contain"
-      />
+      {avatarUrl ? (
+        <Image
+          source={{ uri: avatarUrl }}
+          style={styles.avatar}
+          contentFit="cover"
+          recyclingKey={avatarUrl}
+        />
+      ) : null}
     </View>
   )
 }
@@ -95,5 +105,6 @@ const styles = StyleSheet.create({
   avatar: {
     width: 22,
     height: 22,
+    borderRadius: 11,
   },
 })
